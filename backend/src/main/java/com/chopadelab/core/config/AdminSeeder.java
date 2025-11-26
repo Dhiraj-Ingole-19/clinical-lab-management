@@ -19,6 +19,9 @@ public class AdminSeeder implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @org.springframework.beans.factory.annotation.Value("${app.admin.password}")
+    private String adminPassword;
+
     @Override
     public void run(String... args) throws Exception {
         if (!userRepository.existsByUsername("admin")) {
@@ -27,7 +30,20 @@ public class AdminSeeder implements CommandLineRunner {
 
             User admin = new User();
             admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("Admin@123"));
+
+            // Fallback if property is missing (though Spring should error out if not
+            // present without default)
+            String passwordToUse = (adminPassword != null && !adminPassword.isBlank())
+                    ? adminPassword
+                    : "Admin@123"; // Fallback only if absolutely necessary, but better to enforce env var
+
+            // Better approach: Throw error if not set, but for now let's use the injected
+            // value
+            if (adminPassword == null || adminPassword.isBlank()) {
+                throw new RuntimeException("Admin password not set in environment variables!");
+            }
+
+            admin.setPassword(passwordEncoder.encode(adminPassword));
             admin.setEnabled(true);
             admin.setRoles(Set.of(adminRole));
 

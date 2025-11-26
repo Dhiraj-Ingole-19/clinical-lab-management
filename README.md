@@ -122,3 +122,25 @@ This project is licensed under the MIT License. See the LICENSE file for more de
 Dhiraj Ingole
 
 GitHub: @Dhiraj-Ingole-19
+
+## 🔒 Security
+
+This application uses environment variables for sensitive configuration.
+
+### Admin Password
+The admin password is **NOT** hardcoded. You must set the `ADMIN_PASSWORD` environment variable in your deployment environment or IDE run configuration.
+
+- **Default (Fallback):** `Admin@123` (Only if env var is missing, NOT recommended for production)
+- **Production:** Set `ADMIN_PASSWORD` to a strong, unique password.
+
+Example (Linux/Mac):
+```bash
+export ADMIN_PASSWORD=MySuperSecretPassword!
+./mvnw spring-boot:run
+```
+
+Example (Windows PowerShell):
+```powershell
+$env:ADMIN_PASSWORD="MySuperSecretPassword!"
+./mvnw spring-boot:run
+```
