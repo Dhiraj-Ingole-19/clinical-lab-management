@@ -31,16 +31,9 @@ public class AdminSeeder implements CommandLineRunner {
             User admin = new User();
             admin.setUsername("admin");
 
-            // Fallback if property is missing (though Spring should error out if not
-            // present without default)
-            String passwordToUse = (adminPassword != null && !adminPassword.isBlank())
-                    ? adminPassword
-                    : "Admin@123"; // Fallback only if absolutely necessary, but better to enforce env var
-
-            // Better approach: Throw error if not set, but for now let's use the injected
-            // value
             if (adminPassword == null || adminPassword.isBlank()) {
-                throw new RuntimeException("Admin password not set in environment variables!");
+                throw new RuntimeException(
+                        "Admin password not set in environment variables! Please set app.admin.password.");
             }
 
             admin.setPassword(passwordEncoder.encode(adminPassword));
