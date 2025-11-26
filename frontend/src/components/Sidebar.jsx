@@ -1,71 +1,86 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, ArrowRightLeft, MessageSquare, Settings, LogOut, Wallet, Users, FileText } from 'lucide-react';
+import {
+    Home,
+    Calendar,
+    FileText,
+    User,
+    LogOut,
+    LayoutDashboard,
+    List,
+    Settings
+} from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar = ({ className }) => {
+const Sidebar = () => {
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
     const isAdmin = user?.roles?.includes('ROLE_ADMIN');
 
     return (
-        <aside className={`sidebar glass-panel ${className}`}>
-            <div className="sidebar-brand">
-                <Wallet size={28} />
-                <span>DigiBank</span>
+        <div className="sidebar">
+            <div className="sidebar-header">
+                <h2>Chopade Lab</h2>
             </div>
 
             <nav className="sidebar-nav">
                 {isAdmin ? (
-                    // Admin Navigation
+                    // Admin Links
                     <>
-                        <NavLink to="/admin/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                            <LayoutDashboard />
+                        <NavLink to="/admin/dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                            <LayoutDashboard size={20} />
                             <span>Dashboard</span>
                         </NavLink>
-                        <NavLink to="/admin/dashboard?tab=users" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                            <Users />
-                            <span>User Management</span>
+                        <NavLink to="/admin/appointments" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                            <List size={20} />
+                            <span>All Appointments</span>
                         </NavLink>
-                        <NavLink to="/admin/dashboard?tab=queue" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                            <FileText />
-                            <span>Rollback Queue</span>
+                        <NavLink to="/admin/tests" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                            <Settings size={20} />
+                            <span>Manage Tests</span>
                         </NavLink>
-                        <NavLink to="/settings" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                            <Settings />
-                            <span>Settings</span>
+                        <NavLink to="/profile" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                            <User size={20} />
+                            <span>Profile</span>
                         </NavLink>
                     </>
                 ) : (
-                    // User Navigation
+                    // User Links
                     <>
-                        <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                            <LayoutDashboard />
-                            <span>Dashboard</span>
+                        <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                            <Home size={20} />
+                            <span>Home</span>
                         </NavLink>
-                        <NavLink to="/transactions" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                            <ArrowRightLeft />
-                            <span>Transactions</span>
+                        <NavLink to="/book-test" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                            <Calendar size={20} />
+                            <span>Book Test</span>
                         </NavLink>
-                        <NavLink to="/my-requests" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                            <MessageSquare />
-                            <span>My Requests</span>
+                        <NavLink to="/my-appointments" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                            <FileText size={20} />
+                            <span>My Appointments</span>
                         </NavLink>
-                        <NavLink to="/settings" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                            <Settings />
-                            <span>Settings</span>
+                        <NavLink to="/profile" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                            <User size={20} />
+                            <span>Profile</span>
                         </NavLink>
                     </>
                 )}
             </nav>
 
             <div className="sidebar-footer">
-                <button onClick={logout} className="logout-btn">
+                <button onClick={handleLogout} className="logout-btn">
                     <LogOut size={20} />
-                    <span>Log Out</span>
+                    <span>Logout</span>
                 </button>
             </div>
-        </aside>
+        </div>
     );
 };
 

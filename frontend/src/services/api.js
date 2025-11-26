@@ -1,89 +1,50 @@
-// src/services/api.js
-
 import axios from 'axios';
 
-const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:8080/api'
-  : 'https://digital-banking-fullstack.onrender.com/api';
+// Use production URL if in production, otherwise localhost
+const BASE_URL = import.meta.env.PROD 
+  ? 'https://chopade-lab-api.onrender.com/api' 
+  : 'http://localhost:8080/api';
 
-export const api = axios.create({
-  baseURL: API_URL,
+const api = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
+// Add a request interceptor to attach the JWT token
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// --- Auth Service Calls ---
-export const loginUser = (username, password) => {
-  return api.post('/auth/login', { username, password });
-};
-export const registerUser = (username, password) => {
-  return api.post('/auth/register', { username, password });
+export const authApi = {
+  login: (credentials) => api.post('/auth/login', credentials),
+  register: (userData) => api.post('/auth/register', userData),
+  getCurrentUser: () => api.get('/user/me'),
 };
 
-// --- User Service Calls ---
-export const getCurrentUser = () => {
-  return api.get('/user/accounts/me');
+export const labApi = {
+  // Public/User
+  getAllTests: () => api.get('/tests'),
+  bookAppointment: (data) => api.post('/appointments/book', data),
+  getMyAppointments: () => api.get('/appointments/my-history'),
+
+  // Admin
+  getAllAppointments: () => api.get('/admin/appointments'),
+  updateAppointmentStatus: (id, status, reportUrl) => 
+    api.put(`/admin/appointments/${id}/status`, { status, reportUrl }),
+  
+  // Admin Test Management
+  createTest: (data) => api.post('/admin/tests', data),
+  updateTest: (id, data) => api.put(`/admin/tests/${id}`, data),
+  deleteTest: (id) => api.delete(`/admin/tests/${id}`),
 };
 
-export const getMyRequests = () => {
-  return api.get('/user/requests');
-};
-
-export const requestRollback = (transactionId, reason) => {
-  return api.post(`/user/requests/rollback/${transactionId}`, { reason });
-};
-
-export const getUserAccounts = () => {
-  return api.get('/user/accounts');
-};
-
-export const updateProfile = (profileData) => {
-  return api.put('/user/accounts/profile', profileData);
-};
-
-export const createNewAccount = (accountType) => {
-  return api.post('/user/accounts', { type: accountType });
-};
-export const selectUserAccount = (accountId) => {
-  return api.post(`/user/accounts/select/${accountId}`);
-};
-export const activateAccount = (accountId) => {
-  return api.post(`/user/accounts/activate/${accountId}`);
-};
-export const deactivateAccount = (accountId) => {
-  return api.post(`/user/accounts/deactivate/${accountId}`);
-};
-
-// --- NEW: Lookup Account ---
-export const lookupAccount = (username) => {
-  return api.get(`/user/accounts/lookup/${username}`);
-};
-
-// --- Transaction Service Calls ---
-export const getMyTransactions = () => {
-  return api.get('/user/transactions/my-history');
-};
-export const makeDeposit = (accountId, amount) => {
-  return api.post('/user/transactions/deposit', { accountId, amount });
-};
-export const makeWithdrawal = (accountId, amount) => {
-  return api.post('/user/transactions/withdraw', { accountId, amount });
-};
-export const makeTransfer = (sourceAccountId, targetAccountNumber, amount) => {
-  return api.post('/user/transactions/transfer', { 
-    sourceAccountId, 
-    targetAccountNumber,
-    amount 
-  });
-};
+export default api;

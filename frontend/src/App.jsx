@@ -10,8 +10,13 @@ import Navbar from './components/Navbar.jsx';
 import './App.css';
 
 // Lazy Load Components
+const DashboardPage = React.lazy(() => import('./pages/DashboardPage.jsx'));
+const BookAppointmentPage = React.lazy(() => import('./pages/BookAppointmentPage.jsx'));
+const MyRequestsPage = React.lazy(() => import('./pages/DashboardPage.jsx')); // Reusing Dashboard for now or remove
+const AdminDashboardPage = React.lazy(() => import('./pages/AdminDashboardPage.jsx'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage.jsx'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage.jsx'));
+const TestMenuPage = React.lazy(() => import('./pages/TestMenuPage.jsx'));
 
 // This layout is for PRIVATE pages (dashboard, settings, etc.)
 import Sidebar from './components/Sidebar.jsx';
@@ -48,17 +53,44 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<Suspense fallback={<div>Loading...</div>}><AboutPage /></Suspense>} />
       <Route path="/contact" element={<Suspense fallback={<div>Loading...</div>}><ContactPage /></Suspense>} />
+      <Route path="/menu" element={<Suspense fallback={<div>Loading...</div>}><TestMenuPage /></Suspense>} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
       {/* --- USER PROTECTED ROUTES --- */}
       <Route element={<RoleRoute roleRequired="USER" />}>
-        {/* TODO: Add Lab Routes */}
+        <Route
+          path="/dashboard"
+          element={<AppLayout><DashboardPage /></AppLayout>}
+        />
+        <Route
+          path="/book-test"
+          element={<AppLayout><BookAppointmentPage /></AppLayout>}
+        />
+        <Route
+          path="/my-appointments"
+          element={<AppLayout><DashboardPage /></AppLayout>}
+        />
+        <Route
+          path="/profile"
+          element={<AppLayout><div>Profile Page (Coming Soon)</div></AppLayout>}
+        />
       </Route>
 
       {/* --- ADMIN PROTECTED ROUTES --- */}
       <Route element={<RoleRoute roleRequired="ADMIN" />}>
-        {/* TODO: Add Admin Lab Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={<AppLayout><AdminDashboardPage /></AppLayout>}
+        />
+        <Route
+          path="/admin/appointments"
+          element={<AppLayout><AdminDashboardPage /></AppLayout>} // Reusing for now, logic handles tabs
+        />
+        <Route
+          path="/admin/tests"
+          element={<AppLayout><div>Manage Tests (Coming Soon)</div></AppLayout>}
+        />
       </Route>
 
       {/* Fallback to the public home page */}
