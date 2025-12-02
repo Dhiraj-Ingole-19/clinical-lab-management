@@ -1,25 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { getCurrentUser, getMyTransactions } from '../services/api';
+import { authApi, labApi } from '../services/api';
 
 export const useUserData = () => {
   return useQuery({
     queryKey: ['user'],
     queryFn: async () => {
-      const response = await getCurrentUser();
+      const response = await authApi.getCurrentUser();
       return response.data;
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
 
-export const useTransactions = (accountId) => {
+export const useMyAppointments = () => {
   return useQuery({
-    queryKey: ['transactions', accountId],
+    queryKey: ['my-appointments'],
     queryFn: async () => {
-      if (!accountId) return [];
-      const response = await getMyTransactions();
+      const response = await labApi.getMyAppointments();
       return response.data;
     },
-    enabled: !!accountId,
   });
 };

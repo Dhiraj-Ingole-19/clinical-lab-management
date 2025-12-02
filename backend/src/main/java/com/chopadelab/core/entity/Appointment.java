@@ -25,6 +25,7 @@ public class Appointment {
 
     @ManyToMany
     @JoinTable(name = "appointment_tests", joinColumns = @JoinColumn(name = "appointment_id"), inverseJoinColumns = @JoinColumn(name = "test_id"))
+    @Builder.Default
     private Set<LabTest> tests = new HashSet<>();
 
     private LocalDateTime appointmentTime;

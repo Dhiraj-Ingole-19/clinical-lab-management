@@ -41,10 +41,13 @@ public class AppointmentService {
                 .patient(patient)
                 .tests(tests)
                 .appointmentTime(request.getAppointmentTime())
-                .patientName(request.getPatientName())
-                .patientAge(request.getPatientAge())
-                .patientGender(request.getPatientGender())
-                .patientMobile(request.getPatientMobile())
+                // Fallback to User profile if specific patient details are not provided (e.g.
+                // SELF booking)
+                .patientName(request.getPatientName() != null ? request.getPatientName() : patient.getFullName())
+                .patientAge(request.getPatientAge() != null ? request.getPatientAge() : patient.getAge())
+                .patientGender(request.getPatientGender() != null ? request.getPatientGender() : patient.getGender())
+                .patientMobile(
+                        request.getPatientMobile() != null ? request.getPatientMobile() : patient.getPhoneNumber())
                 .isHomeVisit(request.isHomeVisit())
                 .collectionAddress(request.getCollectionAddress())
                 .totalAmount(totalAmount)

@@ -10,9 +10,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['hero-image.jpg', 'vite.svg'],
       manifest: {
-        name: 'The Digital Bank',
-        short_name: 'DigiBank',
-        description: 'Secure, fast, and simple digital banking.',
+        name: 'Chopade Clinical Lab',
+        short_name: 'ChopadeLab',
+        description: 'Advanced Clinical Laboratory Management System',
         theme_color: '#0F2027',
         background_color: '#f8f9fa',
         display: 'standalone',

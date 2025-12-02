@@ -2,9 +2,6 @@
 
 import React, { useState } from 'react';
 import { getUserByUsername } from '../services/adminApi';
-import AccountManagementRow from './AccountManagementRow';
-import TransactionModal from './TransactionModal';
-import TransactionHistory from './TransactionHistory';
 import '../pages/AdminDashboardPage.css';
 
 const AdminUserSearch = () => {
@@ -13,9 +10,6 @@ const AdminUserSearch = () => {
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searchError, setSearchError] = useState('');
 
-  const [modal, setModal] = useState({ isOpen: false, mode: '', account: null });
-  const [showHistoryForUser, setShowHistoryForUser] = useState(false);
-
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
     if (!searchUsername) return;
@@ -23,7 +17,6 @@ const AdminUserSearch = () => {
     setLoadingSearch(true);
     setSearchError('');
     setFoundUser(null);
-    setShowHistoryForUser(false);
     try {
       const response = await getUserByUsername(searchUsername);
       setFoundUser(response.data);
@@ -35,18 +28,9 @@ const AdminUserSearch = () => {
     }
   };
 
-  const openTransactionModal = (mode, account) => {
-    setModal({ isOpen: true, mode: mode, account: account });
-  };
-
-  const onTransactionSuccess = () => {
-    setModal({ isOpen: false, mode: '', account: null });
-    handleSearch();
-  };
-
   return (
     <div className="admin-section">
-      <h2>Find User</h2>
+      <h2>Find Patient</h2>
       <form className="user-search-form" onSubmit={handleSearch}>
         <input
           type="text"
@@ -65,61 +49,35 @@ const AdminUserSearch = () => {
           <div className="user-details-header">
             <h3>{foundUser.username} (ID: {foundUser.id})</h3>
             <span className={`status ${foundUser.enabled ? 'status-active' : 'status-inactive'}`}>
-              {foundUser.enabled ? 'Enabled' : 'Disabled'}
+              {foundUser.enabled ? 'Active' : 'Inactive'}
             </span>
           </div>
 
-          <div className="account-list-header">
-            <span>Account</span>
-            <span>Balance</span>
-            <span>Status</span>
-            <span>Actions</span>
-          </div>
-          <div className="account-management-list">
-            {foundUser.accounts.length > 0 ? (
-              foundUser.accounts.map(account => (
-                <AccountManagementRow
-                  key={account.id}
-                  account={account}
-                  onAdminUpdate={handleSearch}
-                  onDeposit={() => openTransactionModal('deposit', account)}
-                  onWithdraw={() => openTransactionModal('withdraw', account)}
-                  onTransfer={() => openTransactionModal('transfer', account)} // Added Transfer
-                />
-              ))
-            ) : (
-              <p>This user has no accounts.</p>
-            )}
+          <div className="patient-info-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
+            <div>
+              <strong>Full Name:</strong> {foundUser.fullName || 'N/A'}
+            </div>
+            <div>
+              <strong>Mobile:</strong> {foundUser.phoneNumber || 'N/A'}
+            </div>
+            <div>
+              <strong>Age:</strong> {foundUser.age || 'N/A'}
+            </div>
+            <div>
+              <strong>Gender:</strong> {foundUser.gender || 'N/A'}
+            </div>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <strong>Address:</strong> {foundUser.address || 'N/A'}
+            </div>
           </div>
 
-          <div className="transaction-history-toggle" style={{ marginTop: '1.5rem' }}>
-            <button
-              className="btn-outline"
-              onClick={() => setShowHistoryForUser(!showHistoryForUser)}
-            >
-              {showHistoryForUser ? 'Hide' : 'Show'} User Transaction History
-            </button>
+          <div style={{ marginTop: '1.5rem', padding: '1rem', background: '#f8f9fa', borderRadius: '8px' }}>
+            <h4>Appointment History</h4>
+            <p style={{ color: '#666', fontStyle: 'italic' }}>
+              (To view appointments, please use the "All Appointments" tab and filter by this user)
+            </p>
           </div>
-
-          {showHistoryForUser && (
-            <TransactionHistory
-              isAdminMode={true}
-              userId={foundUser.id}
-              limit={5}
-            />
-          )}
         </div>
-      )}
-
-      {/* --- Transaction Modal --- */}
-      {modal.isOpen && (
-        <TransactionModal
-          isAdminMode={true}
-          mode={modal.mode}
-          account={modal.account}
-          onClose={() => setModal({ isOpen: false, mode: '', account: null })}
-          onSuccess={onTransactionSuccess}
-        />
       )}
     </div>
   );

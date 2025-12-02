@@ -39,7 +39,7 @@ const RegisterPage = () => {
     <div className="auth-container">
       <div className="auth-card">
         <h1 className="auth-header">Create Account</h1>
-        <p className="auth-subheader">Get started with your new bank account.</p>
+        <p className="auth-subheader">Get started with Chopade Clinical Lab.</p>
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-group">

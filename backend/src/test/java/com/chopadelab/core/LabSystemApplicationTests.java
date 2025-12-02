@@ -1,13 +1,13 @@
-package com.fintech.digitalbanking;
+package com.chopadelab.core;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DigitalBankingSystemApplicationTests {
+class LabSystemApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }

@@ -29,6 +29,9 @@ public class User {
     private String phoneNumber;
     private String address;
 
+    private Integer age;
+    private String gender;
+
     @Builder.Default
     @Column(nullable = false)
     private boolean enabled = true;
