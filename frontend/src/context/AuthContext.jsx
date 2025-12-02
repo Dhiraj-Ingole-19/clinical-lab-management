@@ -1,10 +1,5 @@
-// src/context/AuthContext.jsx
-
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-// --- THIS IS THE FIX (Part 2) ---
-// We now import 'api' as a named import (inside the braces)
 import { api, getCurrentUser } from '../services/api';
-// --- END OF FIX ---
 
 const AuthContext = createContext();
 
@@ -78,6 +73,29 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
+    setToken(null);
+    localStorage.removeItem('token');
+    delete api.defaults.headers.common['Authorization'];
+    window.location.href = '/';
+  };
+
+  const value = {
+    user,
+    token,
+    login,
+    register,
+    logout,
+    fetchUser,
+    isAuthenticated: !!token,
+    isLoading: loading,
+    isAuthLoading: authLoading,
+    isAdmin: user?.roles?.includes('ROLE_ADMIN') || false
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
