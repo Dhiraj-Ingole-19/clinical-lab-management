@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { api, getCurrentUser } from '../services/api';
+import api, { authApi } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -15,7 +15,7 @@ const AuthProvider = ({ children }) => {
 
   const fetchUser = useCallback(async () => {
     try {
-      const response = await getCurrentUser();
+      const response = await authApi.getCurrentUser();
       setUser(response.data);
       return response.data;
     } catch (err) {

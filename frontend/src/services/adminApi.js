@@ -1,5 +1,5 @@
 // src/services/adminApi.js
-import { api } from './api'; 
+import api from './api'; 
 
 /**
  * Searches for a user by their username.
