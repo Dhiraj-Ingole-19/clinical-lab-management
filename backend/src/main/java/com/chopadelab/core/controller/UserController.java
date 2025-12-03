@@ -37,17 +37,10 @@ public class UserController {
                 .age(user.getAge())
                 .gender(user.getGender())
                 .roles(user.getRoles().stream()
-                        .map(role -> role.getName())
+                        .map(role -> role.getName()) // Corrected: Role name is String
                         .collect(Collectors.toList()))
                 .build();
 
         return ResponseEntity.ok(userInfo);
-    }
-
-    @GetMapping("/hello")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<String> helloUser(Authentication authentication) {
-        String username = authentication.getName();
-        return ResponseEntity.ok("Hello, " + username + "!");
     }
 }
