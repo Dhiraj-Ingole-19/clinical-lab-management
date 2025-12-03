@@ -12,7 +12,6 @@ import './App.css';
 // Lazy Load Components
 const DashboardPage = React.lazy(() => import('./pages/DashboardPage.jsx'));
 const BookAppointmentPage = React.lazy(() => import('./pages/BookAppointmentPage.jsx'));
-const MyRequestsPage = React.lazy(() => import('./pages/DashboardPage.jsx')); // Reusing Dashboard for now or remove
 const AdminDashboardPage = React.lazy(() => import('./pages/AdminDashboardPage.jsx'));
 const AboutPage = React.lazy(() => import('./pages/AboutPage.jsx'));
 const ContactPage = React.lazy(() => import('./pages/ContactPage.jsx'));

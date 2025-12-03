@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     setAuthLoading(true);
     try {
-      const response = await api.post('/auth/login', { username, password });
+      const response = await authApi.login({ username, password });
       const { token } = response.data;
       localStorage.setItem('token', token);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -59,7 +59,7 @@ const AuthProvider = ({ children }) => {
   const register = async (username, password) => {
     setAuthLoading(true);
     try {
-      const response = await api.post('/auth/register', { username, password });
+      const response = await authApi.register({ username, password });
       const { token } = response.data;
       localStorage.setItem('token', token);
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;

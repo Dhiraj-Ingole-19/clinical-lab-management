@@ -1,71 +1,83 @@
-// src/components/Navbar.jsx
-
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
-import { UserCircle, Wallet, LogOut, Menu, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserCircle, LogOut, Menu, X, Activity } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
 
+  const handleLogout = () => {
+    logout();
+    closeMenu();
+    navigate('/');
+  };
+
   return (
     <nav className="navbar glass-panel">
-      <div className={`navbar-container ${!user ? 'public-mobile-layout' : ''}`}>
+      <div className="navbar-container">
         <Link to={user ? "/dashboard" : "/"} className="navbar-brand" onClick={closeMenu}>
-          <Wallet className="brand-icon" />
-          <span className="brand-text">The Digital Bank</span>
+          <Activity className="brand-icon" />
+          <span className="brand-text">Chopade Clinical Lab</span>
         </Link>
 
-        {/* Public Menu (Always visible on mobile, no toggle) */}
-        {!user && (
-          <div className="navbar-public-menu">
-            <Link to="/about" className="nav-btn-public">About</Link>
-            <Link to="/contact" className="nav-btn-public">Contact</Link>
-            <Link to="/login" className="nav-btn-public">Login</Link>
-            <Link to="/register" className="nav-btn-public primary">Register</Link>
-          </div>
-        )}
+        {/* Desktop Menu */}
+        <div className="navbar-menu desktop-only">
+          {!user ? (
+            <>
+              <Link to="/" className="nav-link">Home</Link>
+              <Link to="/menu" className="nav-link">Services</Link>
+              <Link to="/login" className="nav-btn-public">Login</Link>
+              <Link to="/register" className="nav-btn-public primary">Register</Link>
+            </>
+          ) : (
+            <>
+              <Link to="/dashboard" className="nav-link">Dashboard</Link>
+              <Link to="/profile" className="nav-profile-icon" title="Profile">
+                <UserCircle size={28} />
+              </Link>
+              <button onClick={handleLogout} className="navbar-logout-btn" aria-label="Log Out">
+                <LogOut size={20} />
+                <span>Logout</span>
+              </button>
+            </>
+          )}
+        </div>
 
-        {/* User Desktop Menu */}
-        {user && (
-          <div className="navbar-user-menu desktop-only">
-            <span className="navbar-welcome-text">
-              Welcome, {user.username}
-            </span>
-            <Link to="/settings" className="nav-profile-icon" title="Profile & Settings">
-              <UserCircle size={28} />
-            </Link>
-            <button onClick={logout} className="navbar-logout-btn" aria-label="Log Out">
-              <LogOut size={20} />
-              <span>Logout</span>
-            </button>
-          </div>
-        )}
-
-        {/* Mobile Menu Toggle (Only for Logged-in Users) */}
-        {user && (
-          <button className="mobile-menu-toggle" onClick={toggleMenu} aria-label="Toggle Menu">
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        )}
+        {/* Mobile Menu Toggle */}
+        <button className="mobile-menu-toggle" onClick={toggleMenu} aria-label="Toggle Menu">
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {/* Mobile Menu Dropdown (Only for Logged-in Users) */}
-      {user && isMobileMenuOpen && (
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
         <div className="navbar-mobile-menu glass-panel">
-          <div className="mobile-user-info">
-            <UserCircle size={32} />
-            <span>{user.username}</span>
-          </div>
-          <Link to="/settings" className="mobile-nav-link" onClick={closeMenu}>Profile & Settings</Link>
-          <button onClick={() => { logout(); closeMenu(); }} className="mobile-nav-link mobile-logout">
-            <LogOut size={20} /> Logout
-          </button>
+          {!user ? (
+            <>
+              <Link to="/" className="mobile-nav-link" onClick={closeMenu}>Home</Link>
+              <Link to="/menu" className="mobile-nav-link" onClick={closeMenu}>Services</Link>
+              <Link to="/login" className="mobile-nav-link" onClick={closeMenu}>Login</Link>
+              <Link to="/register" className="mobile-nav-link primary" onClick={closeMenu}>Register</Link>
+            </>
+          ) : (
+            <>
+              <div className="mobile-user-info">
+                <UserCircle size={32} />
+                <span>{user.username}</span>
+              </div>
+              <Link to="/dashboard" className="mobile-nav-link" onClick={closeMenu}>Dashboard</Link>
+              <Link to="/profile" className="mobile-nav-link" onClick={closeMenu}>Profile</Link>
+              <button onClick={handleLogout} className="mobile-nav-link mobile-logout">
+                <LogOut size={20} /> Logout
+              </button>
+            </>
+          )}
         </div>
       )}
     </nav>
