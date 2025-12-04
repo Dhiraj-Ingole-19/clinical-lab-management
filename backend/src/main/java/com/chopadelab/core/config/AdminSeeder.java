@@ -24,12 +24,12 @@ public class AdminSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (!userRepository.existsByUsername("admin")) {
+        if (!userRepository.existsByUsername("Shubu@2597")) {
             Role adminRole = roleRepository.findByName("ROLE_ADMIN")
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
             User admin = new User();
-            admin.setUsername("admin");
+            admin.setUsername("Shubu@2597");
 
             if (adminPassword == null || adminPassword.isBlank()) {
                 throw new RuntimeException(

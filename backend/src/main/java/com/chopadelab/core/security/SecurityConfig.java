@@ -47,9 +47,11 @@ public class SecurityConfig {
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration
-                .setAllowedOrigins(List.of("http://localhost:5173", "https://digital-banking-fullstack.vercel.app"));
-        configuration.setAllowedMethods(List.of("*"));
+        // STRICT SECURITY: Allow only Localhost (Dev) and Production Vercel App
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "https://chopade-clinical-lab.vercel.app"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
