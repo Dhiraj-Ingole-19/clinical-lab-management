@@ -12,24 +12,24 @@ export default defineConfig({
       includeAssets: ['hero-image.jpg', 'vite.svg'],
       manifest: {
         name: 'Chopade Clinical Lab',
-        short_name: 'ChopadeLab',
-        description: 'Advanced Clinical Laboratory Management System',
+        short_name: 'Chopade Lab',
+        description: 'Book pathology tests and get reports online.',
         theme_color: '#0F2027',
-        background_color: '#f8f9fa',
+        background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
         icons: [
           {
-            src: '/vite.svg',
+            src: '/pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/svg+xml',
+            type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/vite.svg',
+            src: '/pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
+            type: 'image/png',
             purpose: 'any maskable'
           }
         ]
