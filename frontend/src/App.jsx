@@ -14,13 +14,14 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
+      {/* User Routes */}
       <Route element={<RoleRoute roleRequired="USER" />}>
         <Route path="/dashboard" element={<DashboardPage />} />
       </Route>
 
-      {/* Admin can also access dashboard or have their own route */}
-      <Route element={<RoleRoute roleRequired="ADMIN" />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
+      {/* Admin Routes */}
+      <Route path="/admin" element={<RoleRoute roleRequired="ADMIN" />}>
+        <Route path="dashboard" element={<DashboardPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" />} />
