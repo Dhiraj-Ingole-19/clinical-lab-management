@@ -6,11 +6,14 @@
   min-height: 100vh;
 }
 
-/* Navbar specific to Landing (if needed) */
+/* Navbar specific to Landing */
 .navbar-simple {
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   padding: 1rem 0;
+  position: relative;
+  z-index: 1000;
+  /* Ensure Navbar is on top */
 }
 
 .nav-content {
@@ -65,6 +68,9 @@
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 900;
+  /* Ensure buttons are clickable */
 }
 
 .btn-lg {
