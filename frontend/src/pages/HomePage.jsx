@@ -4,8 +4,10 @@ import { Activity, ClipboardList, Calendar } from 'lucide-react';
 import './HomePage.css'; // Ensure this file exists or styles are in App.css
 
 const HomePage = () => {
+  console.log("HomePage Rendered - Debug Mode 2");
+
   return (
-    <div className="landing-page">
+    <div className="landing-page" style={{ position: 'relative', zIndex: 99999, backgroundColor: 'white' }}>
       {/* Navbar Placeholder (if not global) */}
       <nav className="navbar-simple">
         <div className="container nav-content">
@@ -14,8 +16,10 @@ const HomePage = () => {
             <span className="brand-name">Chopade Clinical Lab</span>
           </div>
           <div className="nav-links">
-            <Link to="/login" className="btn btn-secondary">Login</Link>
-            <Link to="/register" className="btn btn-primary">Register</Link>
+            {/* DEBUG: Using standard anchor for Login to test Router vs CSS issue */}
+            <a href="/login" className="btn btn-secondary" onClick={() => console.log("Login Clicked (Anchor)")}>Login (A)</a>
+            {/* DEBUG: Using Link for Register */}
+            <Link to="/register" className="btn btn-primary" onClick={() => console.log("Register Clicked (Link)")}>Register (L)</Link>
           </div>
         </div>
       </nav>
