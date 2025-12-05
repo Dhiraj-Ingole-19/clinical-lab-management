@@ -35,6 +35,10 @@ const LoginPage = () => {
       }
     } catch (err) {
       console.error('Login failed:', err);
+      if (err.response) {
+        console.error('Error Response Data:', err.response.data);
+        console.error('Error Status:', err.response.status);
+      }
       if (err.response && err.response.status === 401) {
         setError('Invalid username or password. Please try again.');
       } else {

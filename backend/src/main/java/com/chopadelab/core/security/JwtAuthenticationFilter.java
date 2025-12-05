@@ -31,14 +31,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
         final String token;
         final String username;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            log.warn("JwtAuthenticationFilter: No Bearer token found in request to {}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
@@ -46,8 +47,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         token = authHeader.substring(7);
         try {
             username = jwtService.extractUsername(token);
+            log.info("JwtAuthenticationFilter: Extracted username: {}", username);
         } catch (Exception e) {
-            log.debug("Unable to extract username from token: {}", e.getMessage());
+            log.error("JwtAuthenticationFilter: Unable to extract username from token: {}", e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
@@ -61,7 +63,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // This logic is correct (it fixes the ROLE_ROLE_USER bug)
                 var authorities = roles.stream()
                         .map(role -> {
-                            if (role == null) return null;
+                            if (role == null)
+                                return null;
                             if (role.startsWith("ROLE_")) {
                                 return new SimpleGrantedAuthority(role);
                             } else {
@@ -71,8 +74,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .filter(a -> a != null)
                         .toList();
 
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
+                        null, authorities);
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
