@@ -47,12 +47,11 @@ public class SecurityConfig {
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Allow Localhost and specific Vercel domains
-        configuration.setAllowedOrigins(List.of(
+        // Allow Localhost and ALL Vercel domains (using patterns)
+        configuration.setAllowedOriginPatterns(List.of(
                 "http://localhost:5173",
                 "https://chopade-clinical-lab.vercel.app",
-                "https://chopade-clinical-lab-git-main-dhiraj-ingole-19s-projects.vercel.app" // Add other Vercel
-                                                                                              // preview URLs if needed
+                "https://*.vercel.app" // Wildcard for all Vercel deployments
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin",
