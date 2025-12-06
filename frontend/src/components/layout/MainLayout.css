@@ -7,17 +7,7 @@
 }
 
 /* Sidebar Area */
-.layout-sidebar {
-    width: 260px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    border-right: 1px solid var(--color-border);
-    background-color: var(--color-surface);
-    display: block;
-    z-index: 100;
-}
+
 
 .layout-wrapper {
     flex-grow: 1;
@@ -63,10 +53,7 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
-    .layout-sidebar {
-        display: none;
-        /* Hide Sidebar on Mobile */
-    }
+
 
     .layout-bottom-nav {
         display: block;

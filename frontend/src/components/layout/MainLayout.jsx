@@ -1,6 +1,5 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from './Sidebar';
 import BottomNav from './BottomNav';
 import Navbar from '../Navbar'; // Assuming Navbar is in src/components/Navbar.jsx
 import './MainLayout.css';
@@ -8,10 +7,6 @@ import './MainLayout.css';
 const MainLayout = () => {
     return (
         <div className="main-layout">
-            {/* Desktop Sidebar - Left */}
-            <aside className="layout-sidebar">
-                <Sidebar />
-            </aside>
 
             {/* Main Content Area */}
             <div className="layout-wrapper">

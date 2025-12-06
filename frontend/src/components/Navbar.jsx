@@ -38,6 +38,8 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/dashboard" className="nav-link">Dashboard</Link>
+              <Link to="/book-test" className="nav-link">Book Test</Link>
+              <Link to="/my-appointments" className="nav-link">My Appointments</Link>
               <Link to="/profile" className="nav-profile-icon" title="Profile">
                 <UserCircle size={28} />
               </Link>
