@@ -39,7 +39,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String username;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.warn("JwtAuthenticationFilter: No Bearer token found in request to {}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
@@ -47,9 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         token = authHeader.substring(7);
         try {
             username = jwtService.extractUsername(token);
-            log.info("JwtAuthenticationFilter: Extracted username: {}", username);
         } catch (Exception e) {
-            log.error("JwtAuthenticationFilter: Unable to extract username from token: {}", e.getMessage());
             filterChain.doFilter(request, response);
             return;
         }
@@ -79,9 +76,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                log.debug("Set authentication for user {} with authorities {}", username, authorities);
-            } else {
-                log.debug("Invalid JWT token for user {}", username);
             }
         }
 
