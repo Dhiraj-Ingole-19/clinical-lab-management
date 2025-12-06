@@ -7,7 +7,7 @@ import DashboardPage from './pages/DashboardPage.jsx';
 import BookAppointmentPage from './pages/BookAppointmentPage.jsx';
 import MyAppointmentsPage from './pages/MyAppointmentsPage.jsx';
 import RoleRoute from './components/RoleRoute.jsx';
-import MainLayout from './layouts/MainLayout.jsx';
+import MainLayout from './components/layout/MainLayout.jsx';
 import './App.css';
 
 function App() {

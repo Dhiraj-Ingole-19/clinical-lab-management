@@ -42,11 +42,7 @@ const BottomNav = () => {
             </NavLink>
             <NavLink to="/book-test" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                 <Calendar size={24} />
-                <span>Book</span>
-            </NavLink>
-            <NavLink to="/my-appointments" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                <FileText size={24} />
-                <span>History</span>
+                <span>Book Test</span>
             </NavLink>
             <NavLink to="/profile" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                 <User size={24} />
