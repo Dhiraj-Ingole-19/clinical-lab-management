@@ -87,3 +87,5 @@ const Navbar = () => {
 /* If we want to hide the hamburger on mobile when authenticated, we can rely on React logic or a class.
    For now, we leave Navbar as is, but we could add: */
 /* .authenticated .mobile-menu-toggle { display: none !important; } */
+
+export default Navbar;
