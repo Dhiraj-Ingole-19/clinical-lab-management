@@ -4,7 +4,10 @@ import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
+import BookAppointmentPage from './pages/BookAppointmentPage.jsx';
+import MyAppointmentsPage from './pages/MyAppointmentsPage.jsx';
 import RoleRoute from './components/RoleRoute.jsx';
+import MainLayout from './layouts/MainLayout.jsx';
 import './App.css';
 
 function App() {
@@ -16,12 +19,19 @@ function App() {
 
       {/* User Routes */}
       <Route element={<RoleRoute roleRequired="USER" />}>
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/book-test" element={<BookAppointmentPage />} />
+          <Route path="/my-appointments" element={<MyAppointmentsPage />} />
+        </Route>
       </Route>
 
       {/* Admin Routes */}
       <Route path="/admin" element={<RoleRoute roleRequired="ADMIN" />}>
-        <Route path="dashboard" element={<DashboardPage />} />
+        <Route element={<MainLayout />}>
+          <Route path="dashboard" element={<DashboardPage />} />
+          {/* Add other admin routes here later */}
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/" />} />

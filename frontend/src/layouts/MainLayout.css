@@ -1,0 +1,67 @@
+/* src/layouts/MainLayout.css */
+
+.main-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--color-bg);
+}
+
+/* Sidebar Area */
+.layout-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    border-right: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    display: block;
+    /* Visible by default (Desktop) */
+}
+
+/* Content Area */
+.layout-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Content scrolls independently if needed */
+    padding-bottom: 80px;
+    /* Space for BottomNav on Mobile */
+}
+
+.content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Bottom Nav Area */
+.layout-bottom-nav {
+    display: none;
+    /* Hidden by default (Desktop) */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    z-index: 1000;
+    height: 64px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .layout-sidebar {
+        display: none;
+        /* Hide Sidebar on Mobile */
+    }
+
+    .layout-bottom-nav {
+        display: block;
+        /* Show BottomNav on Mobile */
+    }
+
+    .content-container {
+        padding: 1rem 1rem 5rem 1rem;
+        /* Adjust padding for mobile and bottom nav */
+    }
+}

@@ -51,28 +51,6 @@
     border: 1px solid var(--border-color);
     margin-bottom: 2rem;
     max-width: 500px;
-}
-
-.search-bar input {
-    border: none;
-    outline: none;
-    width: 100%;
-    font-size: 1rem;
-}
-
-.admin-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-}
-
-.admin-table th,
-.admin-table td {
-    padding: 1rem;
-    text-align: left;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -99,6 +77,35 @@
     background: white;
     border-radius: 4px;
     cursor: pointer;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-badge.pending {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.status-badge.confirmed {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-badge.completed {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.status-badge.cancelled {
+    background: #ffebee;
+    color: #c62828;
 }
 
 /* Modal Styles */
