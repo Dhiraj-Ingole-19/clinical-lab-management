@@ -3,7 +3,7 @@ services:
   - type: web
     name: chopade-lab-backend
     env: docker
-    context: ./backend
+    dockerContext: ./backend
     dockerfilePath: Dockerfile
     plan: free
     region: singapore
