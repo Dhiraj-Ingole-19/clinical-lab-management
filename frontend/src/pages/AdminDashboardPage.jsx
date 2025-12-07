@@ -174,15 +174,29 @@ const AdminDashboardPage = () => {
 
                         <div className="modal-actions">
                             {selectedApt.status === 'PENDING' && (
-                                <button
-                                    className="btn-confirm"
-                                    onClick={() => {
-                                        handleStatusUpdate('CONFIRMED');
-                                        sendWhatsApp(selectedApt);
-                                    }}
-                                >
-                                    <CheckCircle size={16} /> Confirm & WhatsApp
-                                </button>
+                                <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+                                    <button
+                                        className="btn-confirm"
+                                        style={{ flex: 1 }}
+                                        onClick={() => {
+                                            handleStatusUpdate('CONFIRMED');
+                                            sendWhatsApp(selectedApt);
+                                        }}
+                                    >
+                                        <CheckCircle size={16} /> Confirm
+                                    </button>
+                                    <button
+                                        className="btn-cancel"
+                                        style={{ flex: 1, background: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '8px', padding: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontWeight: 'bold', cursor: 'pointer' }}
+                                        onClick={() => {
+                                            if (window.confirm('Are you sure you want to cancel this appointment?')) {
+                                                handleStatusUpdate('CANCELLED');
+                                            }
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
                             )}
 
                             <div className="report-section">
