@@ -1,21 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Activity, ClipboardList, Calendar } from 'lucide-react';
-import './HomePage.css'; // Ensure this file exists or styles are in App.css
+import LoginModal from '../components/auth/LoginModal';
+import RegisterModal from '../components/auth/RegisterModal';
+import './HomePage.css';
 
 const HomePage = () => {
+  const [activeModal, setActiveModal] = useState(null); // 'login', 'register', or null
+
+  const openLogin = () => setActiveModal('login');
+  const openRegister = () => setActiveModal('register');
+  const closeModal = () => setActiveModal(null);
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="landing-page" style={{ position: 'relative', zIndex: 1, backgroundColor: 'white' }}>
-      {/* Navbar Placeholder (if not global) */}
-      <nav className="navbar-simple">
-        <div className="container nav-content">
-          <div className="logo">
-            <Activity className="text-primary" size={28} />
-            <span className="brand-name">Chopade Clinical Lab</span>
+
+      {/* Navbar */}
+      <nav className="navbar-simple" style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', borderBottom: '1px solid #eaeaea' }}>
+        <div className="container nav-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0' }}>
+          <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            {/* Using Activity icon as logo placeholder since file was not found */}
+            <Activity className="text-primary" size={32} />
+            <span className="brand-name" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--color-primary)' }}>Chopade Clinical Lab</span>
           </div>
-          <div className="nav-links">
-            <Link to="/login" className="btn btn-secondary">Login</Link>
-            <Link to="/register" className="btn btn-primary">Register</Link>
+
+          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+            <button onClick={() => scrollToSection('services')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#333' }}>Services</button>
+            <button onClick={() => scrollToSection('about')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#333' }}>About</button>
+            <button onClick={() => scrollToSection('contact')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#333' }}>Contact Us</button>
+
+            <button onClick={openLogin} className="btn btn-secondary" style={{ marginLeft: '1rem' }}>Login</button>
+            <button onClick={openRegister} className="btn btn-primary">Register</button>
           </div>
         </div>
       </nav>
@@ -28,15 +50,14 @@ const HomePage = () => {
             Your health is our priority. Experience state-of-the-art diagnostic services with the convenience of home collection and digital reports.
           </p>
           <div className="hero-actions">
-            {/* Using Link components for SPA navigation */}
-            <Link to="/register" className="btn btn-primary btn-lg">Book an Appointment</Link>
-            <Link to="/test-menu" className="btn btn-secondary btn-lg">View Test Menu</Link>
+            <button onClick={openRegister} className="btn btn-primary btn-lg">Book an Appointment</button>
+            <button onClick={() => scrollToSection('services')} className="btn btn-secondary btn-lg">View Test Menu</button>
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="services container">
+      <section id="services" className="services container" style={{ padding: '4rem 0' }}>
         <h2 className="section-title text-center">Our Services</h2>
         <div className="services-grid">
           <div className="card service-card">
@@ -65,10 +86,57 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* About Section */}
+      <section id="about" className="container" style={{ padding: '4rem 0', background: '#f8f9fa' }}>
+        <h2 className="section-title text-center">About Us</h2>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.6', color: '#555' }}>
+            Chopade Clinical Laboratory has been serving the community with precision and care for over 15 years.
+            We are committed to providing high-quality diagnostic services using the latest technology and automated analyzers.
+            Our team of experienced pathologists and technicians ensures that you get accurate results, every time.
+          </p>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="container" style={{ padding: '4rem 0' }}>
+        <h2 className="section-title text-center">Contact Us</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+          <div className="contact-info">
+            <h3>Visit Us</h3>
+            <p>123 Health Street, Wellness City, 411001</p>
+            <p>Maharashtra, India</p>
+
+            <h3 style={{ marginTop: '1.5rem' }}>Call Us</h3>
+            <p>+91 98765 43210</p>
+            <p>020-12345678</p>
+          </div>
+          <div className="contact-form-dummy" style={{ background: '#f0f4f8', padding: '2rem', borderRadius: '8px' }}>
+            <h3 style={{ marginTop: 0 }}>Send a Message</h3>
+            <input type="text" placeholder="Your Name" style={{ width: '100%', padding: '0.8rem', marginBottom: '1rem', border: '1px solid #ddd', borderRadius: '4px' }} />
+            <input type="email" placeholder="Your Email" style={{ width: '100%', padding: '0.8rem', marginBottom: '1rem', border: '1px solid #ddd', borderRadius: '4px' }} />
+            <textarea placeholder="Message" rows="4" style={{ width: '100%', padding: '0.8rem', marginBottom: '1rem', border: '1px solid #ddd', borderRadius: '4px' }}></textarea>
+            <button className="btn btn-primary" style={{ width: '100%' }}>Send Message</button>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="footer text-center">
+      <footer className="footer text-center" style={{ marginTop: 'auto', padding: '2rem 0', background: '#2c3e50', color: 'white' }}>
         <p>© 2025 Chopade Clinical Laboratory. All rights reserved.</p>
       </footer>
+
+      {/* Auth Modals */}
+      <LoginModal
+        isOpen={activeModal === 'login'}
+        onClose={closeModal}
+        onSwitchToRegister={openRegister}
+      />
+      <RegisterModal
+        isOpen={activeModal === 'register'}
+        onClose={closeModal}
+        onSwitchToLogin={openLogin}
+      />
     </div>
   );
 };
