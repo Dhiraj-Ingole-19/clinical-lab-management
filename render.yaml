@@ -7,7 +7,7 @@ services:
     dockerfilePath: Dockerfile
     plan: free
     region: singapore
-    autoDeploy: true  # This forces auto-deploy
+    autoDeploy: true
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
@@ -26,14 +26,6 @@ services:
           name: chopade-lab-db
           property: password
 
-  # Database (PostgreSQL)
-  - type: psql
-    name: chopade-lab-db
-    plan: free
-    region: singapore
-    databaseName: labdb
-    user: labuser
-
   # Frontend Service (React/Vite)
   - type: web
     name: chopade-lab-frontend
@@ -49,3 +41,11 @@ services:
           type: web
           name: chopade-lab-backend
           property: url
+
+databases:
+  # Database (PostgreSQL)
+  - name: chopade-lab-db
+    plan: free
+    region: singapore
+    databaseName: labdb
+    user: labuser
