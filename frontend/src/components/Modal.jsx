@@ -11,11 +11,11 @@ const Modal = ({ title, isOpen, onClose, children }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="modal-close-btn" onClick={onClose} aria-label="Close">
+          &times;
+        </button>
         <div className="modal-header">
           <h2 className="modal-title">{title}</h2>
-          <button className="modal-close-btn" onClick={onClose}>
-            &times;
-          </button>
         </div>
         <div className="modal-body">
           {children}
