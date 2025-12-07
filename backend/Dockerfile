@@ -7,7 +7,7 @@ COPY mvnw pom.xml ./
 RUN sed -i 's/\r$//' mvnw
 RUN chmod +x mvnw
 # improved dependency caching - verify often works better than go-offline for plugins
-RUN ./mvnw clean verify --fail-never -DskipTests
+# Simpler approach: Copy source and build directly to avoid 'no source' errors during verify
 COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
