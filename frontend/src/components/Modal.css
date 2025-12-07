@@ -21,28 +21,37 @@
 }
 
 .modal-content {
-  background: var(--color-white);
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  width: 100%;
-  max-width: 500px;
+  background: #ffffff;
+  /* Force white background */
+  padding: 2rem;
+  border-radius: 16px;
+  /* Modern rounded corners */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 450px;
   animation: slideIn 0.3s ease-out;
+  position: relative;
+  overflow: hidden;
+  color: #333333;
+  /* Ensure default text is dark */
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--color-gray-medium);
-  padding-bottom: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: none;
+  /* remove separator line for cleaner look */
+  padding-bottom: 0;
 }
 
 .modal-title {
-  color: var(--color-primary-dark);
+  color: #1a1a1a;
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
 }
 
 .modal-close-btn {

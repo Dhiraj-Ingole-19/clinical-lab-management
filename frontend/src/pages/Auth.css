@@ -46,57 +46,80 @@
 }
 
 .form-group label {
-  font-weight: 600;
-  color: var(--color-text);
+  font-weight: 500;
+  color: #4a5568;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  display: block;
 }
 
 .form-group input {
   font-family: var(--font-family);
   font-size: 1rem;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--color-gray-medium);
-  border-radius: var(--border-radius);
-  transition: border-color 0.2s;
+  padding: 0.85rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f7fafc;
+  transition: all 0.2s ease;
+  width: 100%;
 }
 
 .form-group input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(10, 77, 152, 0.2);
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
 }
 
 .auth-button {
   font-family: var(--font-family);
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  padding: 0.85rem;
-  color: var(--color-white);
-  background-color: var(--color-primary);
+  padding: 1rem;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   border: none;
-  border-radius: var(--border-radius);
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
-  margin-top: 0.5rem;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  margin-top: 1rem;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .auth-button:hover {
-  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.auth-button:active {
+  transform: translateY(0);
 }
 
 .auth-error {
-  color: var(--color-danger);
-  font-size: 0.9rem;
-  margin-top: -0.75rem; /* Pull it closer to the input */
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: -0.5rem;
+  background-color: #fff5f5;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border-left: 3px solid #e53e3e;
 }
 
 .auth-switch-link {
   margin-top: 1.5rem;
-  font-size: 0.95rem;
-  color: var(--color-gray-dark);
+  font-size: 0.9rem;
+  color: #718096;
 }
 
-.auth-switch-link a {
+.auth-switch-link button {
   font-weight: 600;
   color: var(--color-primary);
   margin-left: 5px;
+  transition: color 0.2s;
+}
+
+.auth-switch-link button:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
 }
