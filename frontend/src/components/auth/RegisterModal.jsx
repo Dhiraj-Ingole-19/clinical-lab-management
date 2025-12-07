@@ -10,20 +10,24 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false);
     const { register } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setIsRegistering(true);
         try {
             await register(username, password);
-            onClose(); // Close modal on success (automatically logs in usually, or redirects)
+            onClose(); // Close modal on success
         } catch (err) {
             if (err.response && err.response.status === 409) {
                 setError('Username taken.');
             } else {
-                setError('Registration failed.');
+                setError('Registration failed. Try again.');
             }
+        } finally {
+            setIsRegistering(false);
         }
     };
 
@@ -37,6 +41,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
+                        disabled={isRegistering}
                     />
                 </div>
 
@@ -48,6 +53,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            disabled={isRegistering}
                             style={{ width: '100%', paddingRight: '40px' }}
                         />
                         <button
@@ -72,8 +78,8 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }) => {
 
                 {error && <p className="auth-error">{error}</p>}
 
-                <button type="submit" className="auth-button">
-                    Register
+                <button type="submit" className="auth-button" disabled={isRegistering}>
+                    {isRegistering ? 'Creating Account...' : 'Register'}
                 </button>
             </form>
 

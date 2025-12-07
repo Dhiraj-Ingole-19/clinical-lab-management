@@ -38,7 +38,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
     };
 
     return (
-        <Modal title="Login" isOpen={isOpen} onClose={onClose}>
+        <Modal title="Welcome Back" isOpen={isOpen} onClose={onClose}>
             <form className="auth-form" onSubmit={handleSubmit} style={{ marginTop: 0 }}>
                 <div className="form-group">
                     <label>Username</label>
@@ -85,7 +85,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
                 {error && <p className="auth-error">{error}</p>}
 
                 <button type="submit" className="auth-button" disabled={isAuthLoading}>
-                    {isAuthLoading ? 'Logging In...' : 'Log In'}
+                    {isAuthLoading ? 'Loading...' : 'Log In'}
                 </button>
             </form>
 

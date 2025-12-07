@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Activity, ClipboardList, Calendar } from 'lucide-react';
 import LoginModal from '../components/auth/LoginModal';
 import RegisterModal from '../components/auth/RegisterModal';
@@ -26,18 +25,17 @@ const HomePage = () => {
       <nav className="navbar-simple" style={{ position: 'sticky', top: 0, zIndex: 1000, background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(10px)', borderBottom: '1px solid #eaeaea' }}>
         <div className="container nav-content" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 0' }}>
           <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            {/* Using Activity icon as logo placeholder since file was not found */}
             <Activity className="text-primary" size={32} />
             <span className="brand-name" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--color-primary)' }}>Chopade Clinical Lab</span>
           </div>
 
-          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-            <button onClick={() => scrollToSection('services')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#333' }}>Services</button>
-            <button onClick={() => scrollToSection('about')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#333' }}>About</button>
-            <button onClick={() => scrollToSection('contact')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#333' }}>Contact Us</button>
+          <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <button onClick={() => scrollToSection('services')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#1e293b' }}>Services</button>
+            <button onClick={() => scrollToSection('about')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#1e293b' }}>About</button>
+            <button onClick={() => scrollToSection('contact')} className="nav-text-link" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', color: '#1e293b' }}>Contact Us</button>
 
-            <button onClick={openLogin} className="btn btn-secondary" style={{ marginLeft: '1rem' }}>Login</button>
-            <button onClick={openRegister} className="btn btn-primary">Register</button>
+            <button onClick={openLogin} className="btn-secondary" style={{ padding: '0.5rem 1.5rem', borderRadius: '0.5rem', fontWeight: 'bold', color: '#1e293b', border: '1px solid #cbd5e1', background: 'white', cursor: 'pointer' }}>Login</button>
+            <button onClick={openRegister} className="btn-primary" style={{ padding: '0.5rem 1.5rem', borderRadius: '0.5rem', fontWeight: 'bold', color: 'white', background: '#2563eb', border: 'none', cursor: 'pointer' }}>Register</button>
           </div>
         </div>
       </nav>

@@ -16,48 +16,6 @@
   backdrop-filter: blur(8px);
   /* Stronger blur */
   -webkit-backdrop-filter: blur(8px);
-  /* Safari support */
-  animation: fadeIn 0.3s ease-out;
-}
-
-.modal-content {
-  background: #ffffff;
-  /* Force white background */
-  padding: 2rem;
-  border-radius: 16px;
-  /* Modern rounded corners */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  max-width: 450px;
-  animation: slideIn 0.3s ease-out;
-  position: relative;
-  overflow: hidden;
-  color: #333333;
-  /* Ensure default text is dark */
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  border-bottom: none;
-  /* remove separator line for cleaner look */
-  padding-bottom: 0;
-}
-
-.modal-title {
-  color: #1a1a1a;
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.modal-close-btn {
-  background: none;
-  border: none;
-  font-size: 2rem;
   color: var(--color-gray-medium);
   cursor: pointer;
   line-height: 1;
