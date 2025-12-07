@@ -4,7 +4,7 @@ services:
     name: chopade-lab-backend
     env: docker
     dockerContext: ./backend
-    dockerfilePath: Dockerfile
+    dockerfilePath: ./backend/Dockerfile
     plan: free
     region: singapore
     autoDeploy: true
