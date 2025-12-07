@@ -1,0 +1,51 @@
+services:
+  # Backend Service (Spring Boot)
+  - type: web
+    name: chopade-lab-backend
+    env: docker
+    context: ./backend
+    dockerfilePath: Dockerfile
+    plan: free
+    region: singapore
+    autoDeploy: true  # This forces auto-deploy
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_URL
+        fromDatabase:
+          name: chopade-lab-db
+          property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: chopade-lab-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: chopade-lab-db
+          property: password
+
+  # Database (PostgreSQL)
+  - type: psql
+    name: chopade-lab-db
+    plan: free
+    region: singapore
+    databaseName: labdb
+    user: labuser
+
+  # Frontend Service (React/Vite)
+  - type: web
+    name: chopade-lab-frontend
+    env: static
+    plan: free
+    region: singapore
+    autoDeploy: true
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: chopade-lab-backend
+          property: url

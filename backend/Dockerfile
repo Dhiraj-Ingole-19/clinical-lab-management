@@ -3,10 +3,11 @@ FROM eclipse-temurin:21-jdk-jammy AS build
 WORKDIR /app
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
-# Fix for windows line endings
+# Fix for windows line endings and permissions
 RUN sed -i 's/\r$//' mvnw
 RUN chmod +x mvnw
-RUN ./mvnw dependency:go-offline
+# improved dependency caching - verify often works better than go-offline for plugins
+RUN ./mvnw clean verify --fail-never -DskipTests
 COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
