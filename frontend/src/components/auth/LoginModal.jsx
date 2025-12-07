@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, X } from 'lucide-react'; // Using Lucide icons
 import Modal from '../Modal';
 import '../Modal.css'; // Reusing Modal CSS
@@ -11,6 +12,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const { login, isAuthLoading } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,6 +21,12 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }) => {
             const user = await login(username, password);
             if (user) {
                 onClose(); // Close modal on success
+                // Navigate based on role
+                if (user.roles && user.roles.includes('ROLE_ADMIN')) {
+                    navigate('/admin/dashboard');
+                } else {
+                    navigate('/dashboard');
+                }
             }
         } catch (err) {
             if (err.response && err.response.status === 401) {
