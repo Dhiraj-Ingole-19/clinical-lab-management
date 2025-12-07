@@ -45,8 +45,8 @@ const AdminDashboardPage = () => {
             );
         }
 
-        // Sort by newest first
-        return filtered.sort((a, b) => new Date(b.appointmentTime) - new Date(a.appointmentTime));
+        // Sort by Date then Time (Ascending)
+        return filtered.sort((a, b) => new Date(a.appointmentTime) - new Date(b.appointmentTime));
     };
 
     const handleStatusUpdate = async (status) => {
@@ -101,12 +101,40 @@ const AdminDashboardPage = () => {
                 />
             </div>
 
+            {/* Admin Stats Section */}
+            <div className="dashboard-stats" style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+                <div className="stat-card" style={{ background: 'white', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', flex: 1, display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div className="stat-icon" style={{ background: '#e0f2fe', padding: '0.75rem', borderRadius: '8px', color: '#0284c7' }}>
+                        <CheckCircle size={24} />
+                    </div>
+                    <div className="stat-info">
+                        <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold' }}>
+                            {appointments.filter(a => a.status === 'COMPLETED' || a.status === 'CLOSED').length}
+                        </h3>
+                        <p style={{ margin: 0, color: '#64748b' }}>Total Completed Visits</p>
+                    </div>
+                </div>
+
+                <div className="stat-card" style={{ background: 'white', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', flex: 1, display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div className="stat-icon" style={{ background: '#fef3c7', padding: '0.75rem', borderRadius: '8px', color: '#d97706' }}>
+                        <FileText size={24} />
+                    </div>
+                    <div className="stat-info">
+                        <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 'bold' }}>
+                            {appointments.filter(a => a.status === 'PENDING').length}
+                        </h3>
+                        <p style={{ margin: 0, color: '#64748b' }}>Pending Requests</p>
+                    </div>
+                </div>
+            </div>
+
             <div className="appointments-list">
                 <table className="admin-table">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Date</th>
+                            <th>Time</th>
                             <th>Patient</th>
                             <th>Tests</th>
                             <th>Status</th>
@@ -118,6 +146,7 @@ const AdminDashboardPage = () => {
                             <tr key={apt.id} onClick={() => setSelectedApt(apt)} className="clickable-row">
                                 <td>#{apt.id}</td>
                                 <td>{new Date(apt.appointmentTime).toLocaleDateString()}</td>
+                                <td>{new Date(apt.appointmentTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
                                 <td>
                                     {apt.patientName || 'Self'} <br />
                                     <small>{apt.patientMobile}</small>
