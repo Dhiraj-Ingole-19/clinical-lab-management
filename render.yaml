@@ -26,21 +26,7 @@ services:
           name: chopade-lab-db
           property: password
 
-  # Frontend Service (React/Vite)
-  - type: web
-    name: chopade-lab-frontend
-    env: static
-    plan: free
-    region: singapore
-    autoDeploy: true
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: ./frontend/dist
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          type: web
-          name: chopade-lab-backend
-          property: url
+
 
 databases:
   # Database (PostgreSQL)
