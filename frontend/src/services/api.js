@@ -44,6 +44,7 @@ export const labApi = {
   createTest: (data) => api.post('/admin/tests', data),
   updateTest: (id, data) => api.put(`/admin/tests/${id}`, data),
   deleteTest: (id) => api.delete(`/admin/tests/${id}`),
+  getAllUsers: () => api.get('/admin/users'),
 };
 
 export default api;

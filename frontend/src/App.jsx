@@ -4,6 +4,8 @@ import HomePage from './pages/HomePage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
+import AdminDashboardPage from './pages/AdminDashboardPage.jsx';
+import AdminAppointmentsPage from './pages/AdminAppointmentsPage.jsx';
 import BookAppointmentPage from './pages/BookAppointmentPage.jsx';
 import MyAppointmentsPage from './pages/MyAppointmentsPage.jsx';
 import ProfilePage from './pages/user/ProfilePage.jsx';
@@ -38,7 +40,8 @@ function App() {
       {/* Admin Routes */}
       <Route path="/admin" element={<RoleRoute roleRequired="ADMIN" />}>
         <Route element={<MainLayout />}>
-          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="dashboard" element={<AdminDashboardPage />} />
+          <Route path="appointments" element={<AdminAppointmentsPage />} />
           {/* Add other admin routes here later */}
         </Route>
       </Route>
