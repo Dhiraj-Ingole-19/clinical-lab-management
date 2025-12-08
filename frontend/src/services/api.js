@@ -26,6 +26,7 @@ export const authApi = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
   getCurrentUser: () => api.get('/user/me'),
+  updateProfile: (data) => api.put('/user/me', data),
 };
 
 export const labApi = {

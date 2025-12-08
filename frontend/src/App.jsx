@@ -6,7 +6,9 @@ import RegisterPage from './pages/RegisterPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 import BookAppointmentPage from './pages/BookAppointmentPage.jsx';
 import MyAppointmentsPage from './pages/MyAppointmentsPage.jsx';
+import ProfilePage from './pages/user/ProfilePage.jsx';
 import RoleRoute from './components/RoleRoute.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 import MainLayout from './components/layout/MainLayout.jsx';
 import './App.css';
 
@@ -16,6 +18,13 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+
+      {/* Shared Authenticated Routes */}
+      <Route element={<ProtectedRoute />}>
+        <Route element={<MainLayout />}>
+          <Route path="/profile" element={<ProfilePage />} />
+        </Route>
+      </Route>
 
       {/* User Routes */}
       <Route element={<RoleRoute roleRequired="USER" />}>

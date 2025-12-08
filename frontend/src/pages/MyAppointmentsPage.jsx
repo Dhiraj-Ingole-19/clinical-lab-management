@@ -45,7 +45,7 @@ const MyAppointmentsPage = () => {
                                 <p><strong>Date:</strong> {new Date(apt.appointmentTime).toLocaleDateString()} at {new Date(apt.appointmentTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                                 <p><strong>Patient:</strong> {apt.patientName || 'Self'}</p>
                                 <p><strong>Tests:</strong> {apt.tests.map(t => t.testName).join(', ')}</p>
-                                <p><strong>Type:</strong> {apt.isHomeVisit ? 'Home Collection' : 'Lab Visit'}</p>
+                                <p><strong>Type:</strong> {(apt.homeVisit || apt.isHomeVisit) ? 'Home Collection' : 'Lab Visit'}</p>
                             </div>
 
                             {apt.reportUrl && (

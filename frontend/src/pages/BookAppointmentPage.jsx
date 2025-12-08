@@ -104,8 +104,7 @@ const BookAppointmentPage = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
                 <span style={{ fontWeight: step >= 1 ? 'bold' : 'normal' }}>1. Patient</span>
                 <span style={{ fontWeight: step >= 2 ? 'bold' : 'normal' }}>2. Tests</span>
-                <span style={{ fontWeight: step >= 3 ? 'bold' : 'normal' }}>3. Visit</span>
-                <span style={{ fontWeight: step >= 4 ? 'bold' : 'normal' }}>4. Pay</span>
+                <span style={{ fontWeight: step >= 3 ? 'bold' : 'normal' }}>3. Visit & Confirm</span>
             </div>
 
             {step === 1 && (
@@ -206,7 +205,7 @@ const BookAppointmentPage = () => {
                             placeholder="Enter full address for collection..."
                             value={collectionAddress}
                             onChange={(e) => setCollectionAddress(e.target.value)}
-                            style={{ width: '100%', height: '80px', padding: '8px', marginBottom: '10px' }}
+                            style={{ width: '100%', height: '80px', padding: '8px', marginBottom: '10px', border: '1px solid #ddd', borderRadius: '4px' }}
                         />
                     )}
 
@@ -215,49 +214,29 @@ const BookAppointmentPage = () => {
                         <input
                             type="datetime-local"
                             value={appointmentTime}
+                            min={new Date().toISOString().slice(0, 16)} // Disable past dates
                             onChange={(e) => setAppointmentTime(e.target.value)}
-                            style={{ display: 'block', width: '100%', padding: '8px', marginTop: '5px' }}
+                            style={{ display: 'block', width: '100%', padding: '10px', marginTop: '5px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '1rem' }}
                         />
+                    </div>
+
+                    {/* Summary Section before Confirmation */}
+                    <div className="summary-card" style={{ background: '#f8f9fa', padding: '15px', borderRadius: '5px', marginBottom: '1rem', marginTop: '2rem' }}>
+                        <h4 style={{ marginBottom: '0.5rem', textTransform: 'uppercase', color: '#666', fontSize: '0.85rem' }}>Booking Summary</h4>
+                        <p><strong>Patient:</strong> {bookingType === 'SELF' ? 'Self' : patientDetails.name}</p>
+                        <p><strong>Tests:</strong> {selectedTests.length} selected</p>
+                        <p><strong>Total Amount:</strong> <span style={{ color: '#28a745', fontWeight: 'bold' }}>₹{calculateTotal()}</span></p>
+                        <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>* Payment to be collected during visit/collection.</p>
                     </div>
 
                     <div style={{ display: 'flex', gap: '10px' }}>
                         <button onClick={() => setStep(2)} style={{ flex: 1, padding: '10px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: '5px' }}>Back</button>
                         <button
-                            onClick={() => setStep(4)}
-                            style={{ flex: 1, padding: '10px', background: '#28a745', color: '#fff', border: 'none', borderRadius: '5px' }}
-                        >
-                            Next: Payment
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {step === 4 && (
-                <div className="step-content">
-                    <h3>Confirm & Pay</h3>
-
-                    <div className="summary-card" style={{ background: '#f8f9fa', padding: '15px', borderRadius: '5px', marginBottom: '1rem' }}>
-                        <p><strong>Patient:</strong> {bookingType === 'SELF' ? 'Self' : patientDetails.name}</p>
-                        <p><strong>Tests:</strong> {selectedTests.length} selected</p>
-                        <p><strong>Home Visit:</strong> {isHomeVisit ? 'Yes' : 'No'}</p>
-                        <h2 style={{ marginTop: '10px', color: '#28a745' }}>Total to Pay: ₹{calculateTotal()}</h2>
-                    </div>
-
-                    <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                        <p>Scan to Pay (Mock)</p>
-                        <div style={{ width: '150px', height: '150px', background: '#ddd', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            QR CODE
-                        </div>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                        <button onClick={() => setStep(3)} style={{ flex: 1, padding: '10px', background: '#6c757d', color: '#fff', border: 'none', borderRadius: '5px' }}>Back</button>
-                        <button
                             onClick={handleSubmit}
-                            disabled={loading}
+                            disabled={loading || !appointmentTime}
                             style={{ flex: 1, padding: '10px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '5px' }}
                         >
-                            {loading ? 'Booking...' : 'Confirm Booking'}
+                            {loading ? 'Confirming...' : 'Confirm Booking'}
                         </button>
                     </div>
                 </div>
