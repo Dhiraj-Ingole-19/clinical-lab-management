@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { labApi } from '../services/api';
 import { Link } from 'react-router-dom';
-import { Calendar, FileText, PlusCircle, Clock } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { Calendar, FileText, PlusCircle, Clock, Loader2 } from 'lucide-react';
 import './Dashboard.css';
 
 const DashboardPage = () => {
     const { user } = useAuth();
-    const [appointments, setAppointments] = useState([]);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchHistory = async () => {
-            try {
-                const res = await labApi.getMyAppointments();
-                setAppointments(res.data);
-            } catch (err) {
-                console.error("Failed to fetch appointments", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (user) fetchHistory();
-    }, [user]);
+    const {
+        data: appointments = [],
+        isLoading,
+        isError
+    } = useQuery({
+        queryKey: ['myAppointments'],
+        queryFn: async () => {
+            const res = await labApi.getMyAppointments();
+            return res.data;
+        },
+        enabled: !!user // Only fetch if user is logged in
+    });
 
     // Get upcoming vs past
     const upcoming = appointments.filter(a => a.status === 'PENDING' || a.status === 'CONFIRMED');
-    const recent = appointments.slice(0, 3); // Top 3 most recent
+    // Sort by recent first for display
+    const recent = [...appointments]
+        .sort((a, b) => new Date(b.appointmentTime) - new Date(a.appointmentTime))
+        .slice(0, 3);
 
     return (
         <div className="dashboard-page">
@@ -72,8 +72,10 @@ const DashboardPage = () => {
                     <Link to="/my-appointments" className="text-link">View All</Link>
                 </div>
 
-                {loading ? (
-                    <div className="loading-state">Loading history...</div>
+                {isLoading ? (
+                    <div className="loading-state"><Loader2 className="animate-spin" /> Loading history...</div>
+                ) : isError ? (
+                    <div className="error-state">Failed to load appointments.</div>
                 ) : appointments.length === 0 ? (
                     <div className="empty-state">
                         <p>You haven't booked any tests yet.</p>

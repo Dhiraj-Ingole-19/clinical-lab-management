@@ -1,45 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { labApi } from '../services/api';
-import { CheckCircle, FileText, Users, Clock, ArrowRight } from 'lucide-react';
+import { CheckCircle, FileText, Users, Clock, ArrowRight, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './AdminDashboardPage.css';
 
 const AdminDashboardPage = () => {
-    const [appointments, setAppointments] = useState([]);
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // 1. Fetch Appointments
+    const {
+        data: appointments = [],
+        isLoading: isAptLoading
+    } = useQuery({
+        queryKey: ['adminAppointments'], // Matches key in AppointmentsPage for shared cache
+        queryFn: async () => {
+            const res = await labApi.getAllAppointments();
+            return res.data;
+        }
+    });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const [aptRes, userRes] = await Promise.all([
-                    labApi.getAllAppointments(),
-                    labApi.getAllUsers()
-                ]);
-                setAppointments(aptRes.data);
-                setUsers(userRes.data);
-            } catch (error) {
-                console.error("Failed to fetch admin data", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, []);
+    // 2. Fetch Users
+    const {
+        data: users = [],
+        isLoading: isUserLoading
+    } = useQuery({
+        queryKey: ['adminUsers'],
+        queryFn: async () => {
+            const res = await labApi.getAllUsers();
+            return res.data;
+        }
+    });
+
+    const isLoading = isAptLoading || isUserLoading;
 
     // Stats Logic
     const pendingCount = appointments.filter(a => a.status === 'PENDING').length;
     const today = new Date().toISOString().split('T')[0];
     const todayCount = appointments.filter(a => a.appointmentTime && a.appointmentTime.startsWith(today)).length;
-    const totalPatients = users.filter(u => u.roles && u.roles.some(r => r.name === 'ROLE_USER')).length; // Check role structure
+    const totalPatients = users.filter(u => u.roles && u.roles.some(r => r.name === 'ROLE_USER')).length;
 
-    // Recent 5 (Sorted by Date Descending for "Recency")
+    // Recent 5 (Sorted by Date Descending)
     const recentAppointments = [...appointments]
         .sort((a, b) => new Date(b.appointmentTime) - new Date(a.appointmentTime))
         .slice(0, 5);
 
-    if (loading) return <div className="loading">Loading Admin Dashboard...</div>;
+    if (isLoading) return <div className="loading"><Loader2 className="animate-spin" /> Loading Admin Dashboard...</div>;
 
     return (
         <div className="admin-dashboard">

@@ -1,42 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { labApi } from '../services/api';
-import { Search, Filter, FileText } from 'lucide-react';
-import './AdminDashboardPage.css'; // Reuse styles
+import { Search, Filter, FileText, Loader2 } from 'lucide-react';
+import './AdminDashboardPage.css';
 
 const AdminAppointmentsPage = () => {
-    const [appointments, setAppointments] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const queryClient = useQueryClient();
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('ALL');
 
-    useEffect(() => {
-        fetchAppointments();
-    }, []);
-
-    const fetchAppointments = async () => {
-        setLoading(true);
-        try {
+    // 1. Fetch Appointments using useQuery
+    const {
+        data: appointments = [],
+        isLoading,
+        isError
+    } = useQuery({
+        queryKey: ['adminAppointments'],
+        queryFn: async () => {
             const res = await labApi.getAllAppointments();
-            setAppointments(res.data);
-        } catch (error) {
-            console.error("Failed to fetch appointments", error);
-        } finally {
-            setLoading(false);
+            return res.data;
         }
-    };
+    });
 
-    const handleStatusUpdate = async (id, status) => {
-        if (!window.confirm(`Are you sure you want to mark this as ${status}?`)) return;
-        try {
-            await labApi.updateAppointmentStatus(id, status, null); // Report URL handled separately if needed
-            fetchAppointments();
-        } catch (error) {
+    // 2. Update Status using useMutation
+    const updateStatusMutation = useMutation({
+        mutationFn: async ({ id, status, reportUrl }) => {
+            return await labApi.updateAppointmentStatus(id, status, reportUrl);
+        },
+        onSuccess: () => {
+            // Invalidating the query triggers a background refetch
+            // The UI will NOT flash "Loading..." unless we explicitly tell it to
+            queryClient.invalidateQueries(['adminAppointments']);
+        },
+        onError: (error) => {
             console.error("Update failed", error);
-            alert("Failed to update status");
+            alert("Failed to update status. Please try again.");
         }
+    });
+
+    const handleStatusUpdate = (id, status) => {
+        if (!window.confirm(`Are you sure you want to mark this as ${status}?`)) return;
+        updateStatusMutation.mutate({ id, status, reportUrl: null });
     };
 
-    // Filter and Sort
+    // Filter and Sort Logic (Client-side for now)
     const filteredAppointments = appointments
         .filter(apt => {
             const matchesSearch = (apt.patientName && apt.patientName.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -44,18 +51,18 @@ const AdminAppointmentsPage = () => {
             const matchesStatus = statusFilter === 'ALL' || apt.status === statusFilter;
             return matchesSearch && matchesStatus;
         })
-        .sort((a, b) => {
-            // Sort by Date Ascending, then Time Ascending
-            return new Date(a.appointmentTime) - new Date(b.appointmentTime);
-        });
+        .sort((a, b) => new Date(a.appointmentTime) - new Date(b.appointmentTime));
 
-    if (loading) return <div className="loading">Loading Appointments...</div>;
+    if (isLoading) return <div className="loading"><Loader2 className="animate-spin" /> Loading Appointments...</div>;
+    if (isError) return <div className="error-state">Failed to load appointments.</div>;
 
     return (
         <div className="admin-page-container">
             <header className="page-header">
                 <h1>All Appointments</h1>
                 <p>Manage all patient bookings</p>
+                {/* Show a small spinner if background updating */}
+                {queryClient.isFetching > 0 && <span className="text-sm text-gray-500 ml-2">Updating...</span>}
             </header>
 
             <div className="filters-bar">
@@ -95,7 +102,7 @@ const AdminAppointmentsPage = () => {
                     </thead>
                     <tbody>
                         {filteredAppointments.map(apt => (
-                            <tr key={apt.id}>
+                            <tr key={apt.id} className={updateStatusMutation.isPending && updateStatusMutation.variables?.id === apt.id ? 'opacity-50' : ''}>
                                 <td>#{apt.id}</td>
                                 <td>
                                     <div className="datetime">
@@ -115,16 +122,23 @@ const AdminAppointmentsPage = () => {
                                 <td><span className={`status-badge ${apt.status.toLowerCase()}`}>{apt.status}</span></td>
                                 <td>
                                     <div className="actions">
-                                        {apt.status === 'PENDING' && (
+                                        {/* Show loading spinner on the specific row being updated */}
+                                        {updateStatusMutation.isPending && updateStatusMutation.variables?.id === apt.id ? (
+                                            <Loader2 size={16} className="animate-spin text-blue-500" />
+                                        ) : (
                                             <>
-                                                <button onClick={() => handleStatusUpdate(apt.id, 'CONFIRMED')} className="btn-icon confirm" title="Confirm">✓</button>
-                                                <button onClick={() => handleStatusUpdate(apt.id, 'CANCELLED')} className="btn-icon cancel" title="Cancel">✕</button>
+                                                {apt.status === 'PENDING' && (
+                                                    <>
+                                                        <button onClick={() => handleStatusUpdate(apt.id, 'CONFIRMED')} className="btn-icon confirm" title="Confirm">✓</button>
+                                                        <button onClick={() => handleStatusUpdate(apt.id, 'CANCELLED')} className="btn-icon cancel" title="Cancel">✕</button>
+                                                    </>
+                                                )}
+                                                {apt.status === 'CONFIRMED' && (
+                                                    <button onClick={() => handleStatusUpdate(apt.id, 'COMPLETED')} className="btn-icon complete" title="Mark Completed">
+                                                        <FileText size={16} />
+                                                    </button>
+                                                )}
                                             </>
-                                        )}
-                                        {apt.status === 'CONFIRMED' && (
-                                            <button onClick={() => handleStatusUpdate(apt.id, 'COMPLETED')} className="btn-icon complete" title="Mark Completed">
-                                                <FileText size={16} />
-                                            </button>
                                         )}
                                     </div>
                                 </td>
