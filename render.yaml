@@ -33,6 +33,14 @@ services:
         fromDatabase:
           name: chopade-lab-db
           property: password
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: APP_BASE_URL
+        value: https://chopade-clinical-lab.vercel.app
+      - key: PHONEPE_MERCHANT_ID
+        value: placeholder-id
+      - key: PHONEPE_SALT_KEY
+        value: placeholder-key
 
 
 
