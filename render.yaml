@@ -13,10 +13,18 @@ services:
         value: prod
       - key: JWT_SECRET
         generateValue: true
-      - key: DB_URL
+      - key: DB_HOST
         fromDatabase:
           name: chopade-lab-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: chopade-lab-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: chopade-lab-db
+          property: database
       - key: DB_USERNAME
         fromDatabase:
           name: chopade-lab-db
