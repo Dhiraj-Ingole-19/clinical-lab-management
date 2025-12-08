@@ -9,7 +9,7 @@ RUN chmod +x mvnw
 # improved dependency caching - verify often works better than go-offline for plugins
 # Simpler approach: Copy source and build directly to avoid 'no source' errors during verify
 COPY src ./src
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw -T 1C clean package -DskipTests -Dmaven.javadoc.skip=true
 
 # Stage 2: Run the application
 FROM eclipse-temurin:21-jre-jammy
