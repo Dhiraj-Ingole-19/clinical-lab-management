@@ -99,38 +99,40 @@ const AdminAppointmentsPage = () => {
                 </div>
             </header>
 
-            {/* Filters Bar - Sticky & Polished */}
-            <div className="bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-gray-200/50 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between sticky top-4 z-20 transition-all">
-                <div className="relative w-full md:w-96">
-                    <Search size={20} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input
-                        type="text"
-                        placeholder="Search by ID or Patient Name..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-11 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 bg-gray-50/50 focus:bg-white"
-                    />
-                </div>
-                <div className="flex items-center gap-3 w-full md:w-auto">
-                    <div className="p-2.5 bg-gray-100 rounded-xl text-gray-500">
-                        <Filter size={20} />
+            {/* Filters Bar - Fixed Sticky Header */}
+            <div className="sticky top-0 z-50 bg-white/95 backdrop-blur-md pt-4 pb-4 mb-4 shadow-sm border-b border-gray-100 -mx-4 px-4 md:mx-0 md:px-0 md:rounded-b-2xl md:static md:bg-transparent md:border-none md:shadow-none md:backdrop-blur-none md:pt-0 md:pb-0 transition-all">
+                <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="relative w-full md:w-96">
+                        <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Search by ID or Patient Name..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-12 pr-4 py-3 bg-gray-100 border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 font-medium"
+                        />
                     </div>
-                    <select
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                        className="w-full md:w-48 p-2.5 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none text-gray-700 bg-white cursor-pointer hover:border-blue-300 transition-colors"
-                    >
-                        <option value="ALL">All Status</option>
-                        <option value="PENDING">Pending</option>
-                        <option value="CONFIRMED">Confirmed</option>
-                        <option value="COMPLETED">Completed</option>
-                        <option value="CANCELLED">Cancelled</option>
-                    </select>
+                    <div className="flex items-center gap-3 w-full sm:w-auto">
+                        <div className="hidden sm:block p-3 bg-gray-100 rounded-2xl text-gray-500">
+                            <Filter size={20} />
+                        </div>
+                        <select
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                            className="w-full sm:w-48 p-3 bg-gray-100 border-transparent rounded-2xl focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none text-gray-700 font-medium cursor-pointer transition-all appearance-none"
+                        >
+                            <option value="ALL">All Status</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="CONFIRMED">Confirmed</option>
+                            <option value="COMPLETED">Completed</option>
+                            <option value="CANCELLED">Cancelled</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
             {/* Content Area */}
-            <div className="min-h-[400px]">
+            <div className="min-h-[400px] pt-4">
                 {/* Added min-height to prevent layout jump */}
                 {isLoading ? (
                     // Loading Skeleton

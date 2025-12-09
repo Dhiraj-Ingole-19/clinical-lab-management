@@ -114,8 +114,8 @@ const ProfilePage = () => {
                     </div>
                 </div>
 
-                {/* Form Section */}
-                <div className="p-6 md:p-8">
+                {/* Form Section - Clean List Style */}
+                <div className="px-6 py-6 pb-24 md:pb-8"> {/* Added padding-bottom for mobile sticky button */}
                     {message.text && (
                         <div className={`mb-6 p-4 rounded-xl flex items-center gap-2 text-sm font-medium ${message.type === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
                             }`}>
@@ -123,101 +123,133 @@ const ProfilePage = () => {
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="grid md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Full Name</label>
-                                <div className={`flex items-center border rounded-xl px-4 py-3 bg-gray-50 transition-colors ${isEditing ? 'border-blue-200 bg-white focus-within:ring-2 ring-blue-100' : 'border-gray-100'}`}>
-                                    <User size={18} className="text-gray-400 mr-3" />
-                                    <input
-                                        type="text"
-                                        name="fullName"
-                                        disabled={!isEditing}
-                                        value={formData.fullName}
-                                        onChange={handleChange}
-                                        className="bg-transparent w-full outline-none text-gray-800 disabled:text-gray-500"
-                                        placeholder="Full Name"
-                                    />
+                    <form onSubmit={handleSubmit} className="space-y-8">
+                        {/* Section: Personal Info */}
+                        <div>
+                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 px-1">Personal Information</h3>
+                            <div className="bg-gray-50 rounded-2xl p-1 space-y-1">
+                                <div className={`flex items-center p-3 rounded-xl transition-colors ${isEditing ? 'bg-white shadow-sm' : ''}`}>
+                                    <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mr-4">
+                                        <User size={20} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase">Full Name</label>
+                                        <input
+                                            type="text"
+                                            name="fullName"
+                                            disabled={!isEditing}
+                                            value={formData.fullName}
+                                            onChange={handleChange}
+                                            className="w-full bg-transparent outline-none text-gray-900 font-medium disabled:text-gray-600 placeholder:text-gray-300"
+                                            placeholder="Enter your name"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Phone Number</label>
-                                <div className={`flex items-center border rounded-xl px-4 py-3 bg-gray-50 transition-colors ${isEditing ? 'border-blue-200 bg-white focus-within:ring-2 ring-blue-100' : 'border-gray-100'}`}>
-                                    <Phone size={18} className="text-gray-400 mr-3" />
-                                    <input
-                                        type="tel"
-                                        name="phoneNumber"
-                                        disabled={!isEditing}
-                                        value={formData.phoneNumber}
-                                        onChange={handleChange}
-                                        className="bg-transparent w-full outline-none text-gray-800 disabled:text-gray-500"
-                                        placeholder="Phone Number"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Age</label>
-                                <div className={`flex items-center border rounded-xl px-4 py-3 bg-gray-50 transition-colors ${isEditing ? 'border-blue-200 bg-white focus-within:ring-2 ring-blue-100' : 'border-gray-100'}`}>
-                                    <Calendar size={18} className="text-gray-400 mr-3" />
-                                    <input
-                                        type="number"
-                                        name="age"
-                                        disabled={!isEditing}
-                                        value={formData.age}
-                                        onChange={handleChange}
-                                        className="bg-transparent w-full outline-none text-gray-800 disabled:text-gray-500"
-                                        placeholder="Age"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Gender</label>
-                                <div className={`flex items-center border rounded-xl px-4 py-3 bg-gray-50 transition-colors ${isEditing ? 'border-blue-200 bg-white focus-within:ring-2 ring-blue-100' : 'border-gray-100'}`}>
-                                    <User size={18} className="text-gray-400 mr-3" />
-                                    <select
-                                        name="gender"
-                                        disabled={!isEditing}
-                                        value={formData.gender}
-                                        onChange={handleChange}
-                                        className="bg-transparent w-full outline-none text-gray-800 disabled:text-gray-500 appearance-none bg-none"
-                                    >
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                                <div className="grid grid-cols-2 gap-1">
+                                    <div className={`flex items-center p-3 rounded-xl transition-colors ${isEditing ? 'bg-white shadow-sm' : ''}`}>
+                                        <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center shrink-0 mr-4">
+                                            <Calendar size={20} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase">Age</label>
+                                            <input
+                                                type="number"
+                                                name="age"
+                                                disabled={!isEditing}
+                                                value={formData.age}
+                                                onChange={handleChange}
+                                                className="w-full bg-transparent outline-none text-gray-900 font-medium disabled:text-gray-600 placeholder:text-gray-300"
+                                                placeholder="00"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={`flex items-center p-3 rounded-xl transition-colors ${isEditing ? 'bg-white shadow-sm' : ''}`}>
+                                        <div className="w-10 h-10 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center shrink-0 mr-4">
+                                            <User size={20} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase">Gender</label>
+                                            <select
+                                                name="gender"
+                                                disabled={!isEditing}
+                                                value={formData.gender}
+                                                onChange={handleChange}
+                                                className="w-full bg-transparent outline-none text-gray-900 font-medium disabled:text-gray-600 appearance-none bg-none"
+                                            >
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wide">Address</label>
-                            <div className={`flex items-start border rounded-xl px-4 py-3 bg-gray-50 transition-colors ${isEditing ? 'border-blue-200 bg-white focus-within:ring-2 ring-blue-100' : 'border-gray-100'}`}>
-                                <MapPin size={18} className="text-gray-400 mr-3 mt-1" />
-                                <textarea
-                                    name="address"
-                                    disabled={!isEditing}
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                    placeholder="Enter your full address"
-                                    rows="3"
-                                    className="bg-transparent w-full outline-none text-gray-800 disabled:text-gray-500 resize-none"
-                                />
+                        {/* Section: Contact Details */}
+                        <div>
+                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 px-1">Contact Details</h3>
+                            <div className="bg-gray-50 rounded-2xl p-1 space-y-1">
+                                <div className={`flex items-center p-3 rounded-xl transition-colors ${isEditing ? 'bg-white shadow-sm' : ''}`}>
+                                    <div className="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0 mr-4">
+                                        <Phone size={20} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase">Phone Number</label>
+                                        <input
+                                            type="tel"
+                                            name="phoneNumber"
+                                            disabled={!isEditing}
+                                            value={formData.phoneNumber}
+                                            onChange={handleChange}
+                                            className="w-full bg-transparent outline-none text-gray-900 font-medium disabled:text-gray-600 placeholder:text-gray-300"
+                                            placeholder="Enter phone number"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className={`flex items-start p-3 rounded-xl transition-colors ${isEditing ? 'bg-white shadow-sm' : ''}`}>
+                                    <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mr-4">
+                                        <MapPin size={20} />
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="text-[10px] font-bold text-gray-400 uppercase">Address</label>
+                                        <textarea
+                                            name="address"
+                                            disabled={!isEditing}
+                                            value={formData.address}
+                                            onChange={handleChange}
+                                            placeholder="Enter full address"
+                                            rows="2"
+                                            className="w-full bg-transparent outline-none text-gray-900 font-medium disabled:text-gray-600 placeholder:text-gray-300 resize-none"
+                                        />
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
+                        {/* Actions - Sticky Bottom Bar */}
                         {isEditing && (
-                            <div className="pt-4 border-t border-gray-100 flex justify-end">
-                                <button
-                                    type="submit"
-                                    disabled={saving}
-                                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold shadow-lg shadow-blue-200 transition-all active:scale-95 disabled:opacity-50"
-                                >
-                                    <Save size={18} />
-                                    {saving ? 'Saving...' : 'Save Changes'}
-                                </button>
+                            <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] z-40 md:static md:bg-transparent md:border-none md:shadow-none md:p-0 md:flex md:justify-end">
+                                <div className="max-w-2xl mx-auto flex gap-3 md:mx-0">
+                                    <button
+                                        type="button"
+                                        onClick={handleCancel}
+                                        disabled={saving}
+                                        className="flex-1 md:flex-none md:w-32 py-3 rounded-xl font-bold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={saving}
+                                        className="flex-[2] md:flex-none md:w-48 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-95 disabled:opacity-50"
+                                    >
+                                        <Save size={18} />
+                                        {saving ? 'Saving...' : 'Save Changes'}
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </form>
