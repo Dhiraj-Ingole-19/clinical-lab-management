@@ -6,7 +6,6 @@ import {
     User,
     Phone,
     ChevronDown,
-    ChevronUp,
     Copy,
     CheckCircle,
     XCircle,
@@ -22,9 +21,10 @@ const AppointmentCard = ({ appointment, onStatusUpdate }) => {
     const copyAddress = (address) => {
         if (!address) return;
         navigator.clipboard.writeText(address);
-        // Optional: toast notification could go here
+        // Toast notification would go here
     };
 
+    // 3. Logic & Styling Rules: Status Logic
     const statusColors = {
         PENDING: 'bg-yellow-100 text-yellow-800 border-yellow-200',
         CONFIRMED: 'bg-blue-100 text-blue-800 border-blue-200',
@@ -49,146 +49,160 @@ const AppointmentCard = ({ appointment, onStatusUpdate }) => {
     const hasAddress = appointment.street || appointment.city || appointment.zipCode || appointment.isHomeVisit;
     const fullAddress = `${appointment.street || ''}, ${appointment.city || ''} ${appointment.zipCode || ''}`.replace(/^, /, '').trim();
 
+    // Helper to determine the "Update Status" button action/text
+    const getNextStatusAction = () => {
+        if (appointment.status === 'PENDING') return { label: 'Confirm Appointment', status: 'CONFIRMED' };
+        if (appointment.status === 'CONFIRMED') return { label: 'Complete Visit', status: 'COMPLETED' };
+        return null;
+    };
+
+    const nextAction = getNextStatusAction();
+
     return (
-        <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 ${isExpanded ? 'ring-2 ring-blue-50' : 'hover:shadow-md'}`}>
-            {/* Header / Summary View */}
+        <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 ${isExpanded ? 'ring-2 ring-blue-50 shadow-md' : 'hover:shadow-md'}`}>
+
+            {/* State A: Collapsed View (The Summary) - Tapping header toggles state */}
             <div
                 onClick={toggleExpand}
                 className="p-4 cursor-pointer active:bg-gray-50 flex flex-col gap-3"
             >
-                {/* Top Row: Name & Status */}
+                {/* Top Row: Patient Name (Bold) + Patient ID (Small/Grey) ... Status Badge (Pill) */}
                 <div className="flex justify-between items-start">
                     <div>
-                        <h3 className="font-bold text-gray-900 leading-tight">
+                        <h3 className="font-bold text-gray-900 leading-tight text-base">
                             {appointment.patientName || 'Self'}
                         </h3>
                         <span className="text-xs text-gray-500 font-mono">#{appointment.id}</span>
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium border flex items-center gap-1 ${statusColors[appointment.status] || 'bg-gray-100 text-gray-800'}`}>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium border flex items-center gap-1.5 ${statusColors[appointment.status] || 'bg-gray-100 text-gray-800'}`}>
                         <StatusIcon size={12} strokeWidth={2.5} />
                         {appointment.status}
                     </span>
                 </div>
 
-                {/* Middle Row: Tests */}
+                {/* Middle Row: Test Name (Icon + Text) */}
                 <div className="flex items-start gap-2 text-sm text-gray-700">
                     <FileText size={16} className="text-gray-400 mt-0.5 shrink-0" />
-                    <span className="line-clamp-1">{appointment.tests?.map(t => t.testName).join(', ')}</span>
+                    <span className="line-clamp-1 font-medium">
+                        {appointment.tests?.map(t => t.testName).join(', ') || 'No tests specified'}
+                    </span>
                 </div>
 
-                {/* Bottom Row: Date & Time + Expand Icon */}
-                <div className="flex justify-between items-center mt-1">
-                    <div className="flex items-center gap-3 text-sm text-gray-500">
-                        <div className="flex items-center gap-1.5">
-                            <Calendar size={14} />
-                            <span>{formattedDate}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
-                            <Clock size={14} />
-                            <span>{formattedTime}</span>
-                        </div>
+                {/* Bottom Row: Date & Time (Icon + Text) */}
+                <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
+                    <div className="flex items-center gap-1.5">
+                        <Calendar size={14} />
+                        <span>{formattedDate}</span>
                     </div>
+                    <div className="flex items-center gap-1.5">
+                        <Clock size={14} />
+                        <span>{formattedTime}</span>
+                    </div>
+                </div>
+
+                {/* Centered Chevron Toggle */}
+                <div className="flex justify-center mt-1">
                     <div className={`transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
                         <ChevronDown size={20} className="text-gray-400" />
                     </div>
                 </div>
             </div>
 
-            {/* Expanded Details View */}
+            {/* State B: Expanded View (The Details) */}
             {isExpanded && (
                 <div className="border-t border-gray-100 bg-gray-50/50 p-4 animate-in slide-in-from-top-2 duration-200">
-                    {/* Demographics */}
+
+                    {/* Patient Demographics: Age and Gender */}
                     <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-blue-100 text-blue-600 rounded-lg">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-blue-100 text-blue-600 rounded-lg">
                                 <User size={16} />
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500 uppercase tracking-wide">Age</p>
-                                <p className="font-semibold text-gray-900">{appointment.patientAge || 'N/A'}</p>
+                                <p className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Age</p>
+                                <p className="font-semibold text-gray-900 text-sm">{appointment.patientAge || 'N/A'}</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-purple-100 text-purple-600 rounded-lg">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-purple-100 text-purple-600 rounded-lg">
                                 <User size={16} />
                             </div>
                             <div>
-                                <p className="text-xs text-gray-500 uppercase tracking-wide">Gender</p>
-                                <p className="font-semibold text-gray-900 capitalize">{appointment.patientGender || 'N/A'}</p>
+                                <p className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Gender</p>
+                                <p className="font-semibold text-gray-900 capitalize text-sm">{appointment.patientGender || 'N/A'}</p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Address Section */}
-                    <div className="mb-4">
-                        <div className="flex items-start gap-2.5 p-3 bg-white rounded-lg border border-gray-100">
+                    {/* Location Details: Address with Map Pin + Copy Button */}
+                    <div className="mb-6">
+                        <div className="flex items-start gap-3">
                             <MapPin size={18} className={`shrink-0 mt-0.5 ${hasAddress ? 'text-red-500' : 'text-gray-400'}`} />
-                            <div className="flex-1">
-                                <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Collection Address</p>
-                                {hasAddress ? (
-                                    <>
-                                        <p className="text-sm text-gray-800 leading-relaxed">{fullAddress || "Home Collection"}</p>
+                            <div className="flex-1 min-w-0">
+                                <div className="flex justify-between items-center mb-1">
+                                    <p className="text-[10px] text-gray-500 uppercase tracking-wider font-bold">Collection Address</p>
+                                    {hasAddress && (
                                         <button
                                             onClick={(e) => { e.stopPropagation(); copyAddress(fullAddress); }}
-                                            className="text-xs text-blue-600 font-medium mt-1 hover:underline flex items-center gap-1"
+                                            className="text-xs text-blue-600 font-medium hover:text-blue-700 flex items-center gap-1 px-2 py-0.5 rounded hover:bg-blue-50 transition-colors"
                                         >
-                                            <Copy size={12} /> Copy Address
+                                            <Copy size={12} /> Copy
                                         </button>
-                                    </>
+                                    )}
+                                </div>
+                                {hasAddress ? (
+                                    <p className="text-sm text-gray-800 leading-relaxed break-words">{fullAddress}</p>
                                 ) : (
-                                    <p className="text-sm text-gray-400 italic">
-                                        📍 Lab Visit (Walk-in)
-                                    </p>
+                                    <p className="text-sm text-gray-400 italic">📍 Lab Visit (Walk-in)</p>
                                 )}
                             </div>
                         </div>
                     </div>
 
-                    {/* Action Bar */}
-                    <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
-                        {appointment.patientMobile && (
+                    {/* Action Grid */}
+                    <div className="grid grid-cols-2 gap-3 mb-3">
+                        {/* Button 1: "Call Patient" */}
+                        {appointment.patientMobile ? (
                             <a
                                 href={`tel:${appointment.patientMobile}`}
-                                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium"
+                                className="flex items-center justify-center gap-2 py-3 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-colors text-sm font-semibold border border-green-200"
                                 onClick={(e) => e.stopPropagation()}
                             >
                                 <Phone size={16} />
                                 Call
                             </a>
-                        )}
-
-                        {appointment.status === 'PENDING' && (
-                            <>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); onStatusUpdate(appointment.id, 'CONFIRMED'); }}
-                                    className="flex-[2] py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-sm shadow-blue-200 text-sm font-medium transition-colors"
-                                >
-                                    Confirm
-                                </button>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); onStatusUpdate(appointment.id, 'CANCELLED'); }}
-                                    className="flex-1 py-2.5 text-red-600 hover:bg-red-50 rounded-lg text-sm font-medium transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                            </>
-                        )}
-
-                        {appointment.status === 'CONFIRMED' && (
-                            <button
-                                onClick={(e) => { e.stopPropagation(); onStatusUpdate(appointment.id, 'COMPLETED'); }}
-                                className="flex-[2] py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-sm shadow-green-200 text-sm font-medium transition-colors"
-                            >
-                                Complete Visit
-                            </button>
-                        )}
-
-                        {['COMPLETED', 'CANCELLED'].includes(appointment.status) && (
-                            <div className="flex-1 text-center py-2 text-xs text-gray-400 font-medium bg-gray-50 rounded-lg">
-                                No Actions Available
+                        ) : (
+                            <div className="py-3 bg-gray-50 text-gray-300 rounded-lg flex justify-center items-center border border-gray-100 cursor-not-allowed">
+                                <Phone size={16} />
                             </div>
                         )}
+
+                        {/* Button 2: "Update Status" */}
+                        {nextAction ? (
+                            <button
+                                onClick={(e) => { e.stopPropagation(); onStatusUpdate(appointment.id, nextAction.status); }}
+                                className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-sm text-sm font-semibold transition-colors active:scale-[0.98]"
+                            >
+                                {nextAction.label === 'Confirm Appointment' ? 'Confirm' : 'Complete'}
+                            </button>
+                        ) : (
+                            <button disabled className="w-full py-3 bg-gray-100 text-gray-400 rounded-lg text-sm font-medium cursor-not-allowed">
+                                {appointment.status === 'CANCELLED' ? 'Cancelled' : 'Completed'}
+                            </button>
+                        )}
                     </div>
+
+                    {/* Button 3: "Cancel" (Centered Text Link) */}
+                    {appointment.status === 'PENDING' && (
+                        <div className="text-center">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); onStatusUpdate(appointment.id, 'CANCELLED'); }}
+                                className="px-4 py-2 text-red-600 hover:text-red-700 text-sm font-medium hover:underline hover:bg-red-50 rounded-lg transition-colors"
+                            >
+                                Cancel Appointment
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

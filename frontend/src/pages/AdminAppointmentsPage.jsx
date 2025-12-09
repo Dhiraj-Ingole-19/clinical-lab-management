@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { labApi } from '../services/api';
 import { Search, Filter, Loader2, ChevronLeft, ChevronRight, CalendarX } from 'lucide-react';
 import AppointmentCard from '../components/AppointmentCard';
+import AppointmentSkeleton from '../components/AppointmentSkeleton';
 import './AdminDashboardPage.css';
 
 const AdminAppointmentsPage = () => {
@@ -131,17 +132,7 @@ const AdminAppointmentsPage = () => {
                 // Loading Skeleton
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[...Array(6)].map((_, i) => (
-                        <div key={i} className="bg-white h-48 rounded-xl border border-gray-100 p-4 animate-pulse flex flex-col gap-4">
-                            <div className="flex justify-between">
-                                <div className="h-6 w-32 bg-gray-200 rounded"></div>
-                                <div className="h-6 w-20 bg-gray-200 rounded-full"></div>
-                            </div>
-                            <div className="h-4 w-48 bg-gray-200 rounded mt-2"></div>
-                            <div className="mt-auto flex justify-between">
-                                <div className="h-4 w-24 bg-gray-200 rounded"></div>
-                                <div className="h-4 w-16 bg-gray-200 rounded"></div>
-                            </div>
-                        </div>
+                        <AppointmentSkeleton key={i} />
                     ))}
                 </div>
             ) : filteredAppointments.length === 0 ? (
