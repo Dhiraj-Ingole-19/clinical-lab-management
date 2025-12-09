@@ -99,24 +99,26 @@ const AdminAppointmentsPage = () => {
                 </div>
             </header>
 
-            {/* Filters Bar */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between sticky top-20 z-10 transition-shadow hover:shadow-md">
+            {/* Filters Bar - Sticky & Polished */}
+            <div className="bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-sm border border-gray-200/50 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between sticky top-4 z-20 transition-all">
                 <div className="relative w-full md:w-96">
-                    <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <Search size={20} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"
                         placeholder="Search by ID or Patient Name..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                        className="w-full pl-11 pr-4 py-2.5 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all placeholder:text-gray-400 text-gray-700 bg-gray-50/50 focus:bg-white"
                     />
                 </div>
-                <div className="flex items-center gap-2 w-full md:w-auto">
-                    <Filter size={18} className="text-gray-400 shrink-0" />
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                    <div className="p-2.5 bg-gray-100 rounded-xl text-gray-500">
+                        <Filter size={20} />
+                    </div>
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="w-full md:w-48 p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-gray-700 bg-white"
+                        className="w-full md:w-48 p-2.5 border border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none text-gray-700 bg-white cursor-pointer hover:border-blue-300 transition-colors"
                     >
                         <option value="ALL">All Status</option>
                         <option value="PENDING">Pending</option>
@@ -128,72 +130,75 @@ const AdminAppointmentsPage = () => {
             </div>
 
             {/* Content Area */}
-            {isLoading ? (
-                // Loading Skeleton
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[...Array(6)].map((_, i) => (
-                        <AppointmentSkeleton key={i} />
-                    ))}
-                </div>
-            ) : filteredAppointments.length === 0 ? (
-                // Empty State
-                <div className="flex flex-col items-center justify-center py-16 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-                    <div className="bg-white p-4 rounded-full shadow-sm mb-4">
-                        <CalendarX size={32} className="text-gray-400" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900">No appointments found</h3>
-                    <p className="text-gray-500 max-w-sm mt-1">
-                        We couldn't find any appointments matching your current filters. Try generating a new request or adjusting your search.
-                    </p>
-                    <button
-                        onClick={() => { setSearchTerm(''); setStatusFilter('ALL'); }}
-                        className="mt-6 text-blue-600 font-medium hover:underline"
-                    >
-                        Clear all filters
-                    </button>
-                </div>
-            ) : (
-                // Appointment Grid
-                <div className="space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {displayedAppointments.map(apt => (
-                            <AppointmentCard
-                                key={apt.id}
-                                appointment={apt}
-                                onStatusUpdate={handleStatusUpdate}
-                            />
+            <div className="min-h-[400px]">
+                {/* Added min-height to prevent layout jump */}
+                {isLoading ? (
+                    // Loading Skeleton
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-500">
+                        {[...Array(6)].map((_, i) => (
+                            <AppointmentSkeleton key={i} />
                         ))}
                     </div>
-
-                    {/* Pagination Controls */}
-                    {totalPages > 1 && (
-                        <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-                            <div className="text-sm text-gray-500">
-                                Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredAppointments.length)}</span> of <span className="font-medium">{filteredAppointments.length}</span> results
-                            </div>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                    disabled={currentPage === 1}
-                                    className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                >
-                                    <ChevronLeft size={20} />
-                                </button>
-                                <span className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 flex items-center">
-                                    Page {currentPage} of {totalPages}
-                                </span>
-                                <button
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                    disabled={currentPage === totalPages}
-                                    className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                >
-                                    <ChevronRight size={20} />
-                                </button>
-                            </div>
+                ) : filteredAppointments.length === 0 ? (
+                    // Empty State with polished UI
+                    <div className="flex flex-col items-center justify-center py-24 text-center bg-gray-50/50 rounded-2xl border-2 border-dashed border-gray-200">
+                        <div className="bg-white p-6 rounded-full shadow-sm mb-4 ring-4 ring-gray-100">
+                            <CalendarX size={40} className="text-gray-300" />
                         </div>
-                    )}
-                </div>
-            )}
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">No appointments found</h3>
+                        <p className="text-gray-500 max-w-sm mt-1">
+                            We couldn't find any appointments matching your current filters. Try generating a new request or adjusting your search.
+                        </p>
+                        <button
+                            onClick={() => { setSearchTerm(''); setStatusFilter('ALL'); }}
+                            className="mt-6 text-blue-600 font-medium hover:underline"
+                        >
+                            Clear all filters
+                        </button>
+                    </div>
+                ) : (
+                    // Appointment Grid
+                    <div className="space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {displayedAppointments.map(apt => (
+                                <AppointmentCard
+                                    key={apt.id}
+                                    appointment={apt}
+                                    onStatusUpdate={handleStatusUpdate}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Pagination Controls */}
+                        {totalPages > 1 && (
+                            <div className="flex items-center justify-between border-t border-gray-200 pt-6">
+                                <div className="text-sm text-gray-500">
+                                    Showing <span className="font-medium">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-medium">{Math.min(currentPage * itemsPerPage, filteredAppointments.length)}</span> of <span className="font-medium">{filteredAppointments.length}</span> results
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    >
+                                        <ChevronLeft size={20} />
+                                    </button>
+                                    <span className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 flex items-center">
+                                        Page {currentPage} of {totalPages}
+                                    </span>
+                                    <button
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    >
+                                        <ChevronRight size={20} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

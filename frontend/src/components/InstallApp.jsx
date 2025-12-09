@@ -31,8 +31,8 @@ const InstallApp = () => {
 
     console.log('InstallApp: Rendering install button!');
     return (
-        <button onClick={installApp} className="btn btn-success" style={{ width: '100%', marginBottom: '1rem', display: 'flex', gap: '0.5rem', justifyContent: 'center', alignItems: 'center' }}>
-            <Download size={18} /> Install DigiBank App
+        <button onClick={installApp} className="flex w-full items-center justify-center gap-2 mb-4 p-3 bg-blue-600 text-white rounded-xl font-semibold shadow-sm hover:bg-blue-700 transition-colors">
+            <Download size={18} /> Install App
         </button>
     );
 };
