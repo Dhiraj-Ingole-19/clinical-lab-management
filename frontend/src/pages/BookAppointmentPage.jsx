@@ -50,8 +50,8 @@ const BookAppointmentPage = () => {
                 mobile: user.phoneNumber || ''
             });
         } else if (bookingType === 'FAMILY') {
-            // Optional: Clear fields or keep them empty for new entry
-            // setPatientDetails({ name: '', age: '', gender: 'Male', mobile: '' });
+            // Clear fields for new family entry
+            setPatientDetails({ name: '', age: '', gender: 'Male', mobile: '' });
         }
     }, [bookingType, user]);
 
