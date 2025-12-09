@@ -7,4 +7,5 @@ public record UserDto(
         String username,
         boolean enabled,
         List<String> roles // Optional: List of role names
-) {}
+) {
+}

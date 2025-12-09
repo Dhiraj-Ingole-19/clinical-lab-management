@@ -2,6 +2,7 @@ package com.chopadelab.core.service;
 
 import com.chopadelab.core.dto.AuthRequest;
 import com.chopadelab.core.dto.AuthResponse;
+import com.chopadelab.core.dto.UserDto;
 import com.chopadelab.core.entity.Role;
 import com.chopadelab.core.entity.User;
 import com.chopadelab.core.exception.InvalidCredentialsException;
@@ -37,14 +38,22 @@ public class AuthService {
     public AuthResponse login(AuthRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            ;
             String token = jwtService.generateToken(userDetails);
 
-            return new AuthResponse(token);
+            User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+
+            UserDto userDto = new UserDto(
+                    user.getId(),
+                    user.getUsername(),
+                    user.isEnabled(),
+                    user.getRoles().stream().map(Role::getName).toList());
+
+            return new AuthResponse(token, userDto);
         } catch (BadCredentialsException e) {
             throw new InvalidCredentialsException("Invalid username or password", e);
         }
@@ -73,13 +82,19 @@ public class AuthService {
 
         // Authenticate after registration
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        ;
         String token = jwtService.generateToken(userDetails);
 
-        return new AuthResponse(token);
+        UserDto userDto = new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.isEnabled(),
+                user.getRoles().stream().map(Role::getName).toList());
+
+        return new AuthResponse(token, userDto);
     }
 }

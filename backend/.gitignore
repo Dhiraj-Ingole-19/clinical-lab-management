@@ -34,3 +34,7 @@ build/
 digital-banking-frontend/node_modules
 digital-banking-frontend/dist
 digital-banking-frontend/.vite/
+
+### Local Config ###
+application-local.properties
+

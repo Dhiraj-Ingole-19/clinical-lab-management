@@ -9,9 +9,12 @@ Deployments take 10-20 minutes. Only deploy when a full feature set is complete 
 ## 1. Local Development Loop (Fast)
 
 ### Backend (Java/Spring Boot)
-*   **Run**: `mvn spring-boot:run` or use your IDE's "Run" button.
+*   **Run**: `mvn spring-boot:run -Dspring-boot.run.profiles=local`
 *   **Port**: `http://localhost:8080`
-*   **Database**: Connects to the Render DB (if configured in `application.properties`) or a local DB.
+*   **Database**: 
+    *   **Default**: Uses H2 (In-Memory). No setup needed, but data is reset on restart.
+    *   **Persistent**: Uncomment "Option 2" in `application-local.properties` to use Local PostgreSQL.
+    *   **Remote**: Uncomment "Option 3" to connect to Render (requires internet).
 
 ### Frontend (React/Vite)
 *   **Run**: `npm run dev`
@@ -28,17 +31,17 @@ Only push to `main` when:
 Before pushing, run these commands to catch errors early:
 
 **Backend**:
-\`\`\`bash
+```bash
 cd backend
 ./mvnw clean package -DskipTests
-\`\`\`
+```
 *(If this fails, Render will fail too)*
 
 **Frontend**:
-\`\`\`bash
+```bash
 cd frontend
 npm run build
-\`\`\`
+```
 *(If this fails, Vercel will fail too)*
 
 ## 4. Troubleshooting Slowness
