@@ -3,7 +3,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { labApi } from '../services/api';
 import StickyHeader from '../components/StickyHeader';
 import AppointmentCard from '../components/AppointmentCard';
-import AppointmentCard from '../components/AppointmentCard';
 import './AdminDashboardPage.css';
 
 const AdminAppointmentsPage = () => {
