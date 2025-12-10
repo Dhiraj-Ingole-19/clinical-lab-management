@@ -66,15 +66,16 @@ const AdminAppointmentsPage = () => {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-24">
-            {/* 1. Header */}
+        <div className="min-h-screen bg-gray-50 pb-32">
+            {/* 1. Header (Slim) */}
             <StickyHeader onSearch={setSearchTerm} onFilterChange={setStatusFilter} />
 
             {/* 2. Content Grid */}
-            <div className="p-4">
-                <div className="mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900">All Appointments</h2>
-                    <p className="text-gray-500 text-sm">Manage all patient bookings</p>
+            <div className="p-4 max-w-7xl mx-auto">
+                {/* Page Title - Now below the Sticky Header */}
+                <div className="mb-5 mt-2 px-1">
+                    <h2 className="text-xl font-bold text-gray-900">All Appointments</h2>
+                    <p className="text-gray-500 text-xs mt-0.5">Manage patient requests</p>
                 </div>
 
                 {isLoading ? (
