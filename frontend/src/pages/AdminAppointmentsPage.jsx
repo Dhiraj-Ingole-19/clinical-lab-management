@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { labApi } from '../services/api';
 import StickyHeader from '../components/StickyHeader';
 import AppointmentCard from '../components/AppointmentCard';
-import MobileNavbar from '../components/MobileNavbar';
+import AppointmentCard from '../components/AppointmentCard';
 import './AdminDashboardPage.css';
 
 const AdminAppointmentsPage = () => {
@@ -62,10 +62,11 @@ const AdminAppointmentsPage = () => {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-32">
+        // Negative margins to counteract MainLayout padding (p-4 mobile, p-8 desktop) to ensure full-bleed
+        <div className="min-h-screen bg-gray-50 pb-32 -mt-4 -mx-4 md:-mt-8 md:-mx-8">
             {/* MASTER STICKY CONTAINER (Title + Search) */}
-            {/* Sits right below the Global Navbar (64px) */}
-            <div className="sticky top-[64px] z-30 bg-white border-b border-gray-200 shadow-sm">
+            {/* Top-0 because it lives inside the scrolling .layout-content, which starts below the Navbar */}
+            <div className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
 
                 {/* 1. Fixed Heading */}
                 <div className="px-4 py-3 bg-white border-b border-gray-100">
@@ -101,8 +102,7 @@ const AdminAppointmentsPage = () => {
                 )}
             </div>
 
-            {/* Bottom Nav */}
-            <MobileNavbar />
+            {/* Bottom Nav provided by MainLayout */}
         </div>
     );
 };

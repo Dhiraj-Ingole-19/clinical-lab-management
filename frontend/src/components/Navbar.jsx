@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserCircle, LogOut, Menu, X, Activity } from 'lucide-react';
+import { UserCircle, LogOut, Menu, X, Activity, ChevronDown, LayoutDashboard } from 'lucide-react';
+import { getNavItems } from '../config/navigation';
 import LoginModal from './auth/LoginModal';
 import RegisterModal from './auth/RegisterModal';
 import './Navbar.css';
@@ -12,6 +13,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
@@ -54,19 +56,48 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/dashboard" className="nav-link">Dashboard</Link>
-                <Link to="/book-test" className="nav-link">Book Test</Link>
-                <Link to="/my-appointments" className="nav-link">My Appointments</Link>
-                <Link to="/profile" className="nav-profile-icon" title="Profile">
-                  <UserCircle size={28} />
-                </Link>
-                <button onClick={handleLogout} className="navbar-logout-btn" aria-label="Log Out">
-                  <LogOut size={20} />
-                  <span>Logout</span>
-                </button>
+                {/* Dynamic Authenticated Links from Config */}
+                {/* Filter for Desktop Only */}
+                {getNavItems(user).filter(item => item.desktop).map(item => (
+                  <Link key={item.path} to={item.path} className="nav-link">
+                    {item.label}
+                  </Link>
+                ))}
+
+                {/* User Dropdown */}
+                <div className="relative user-dropdown-container">
+                  <button
+                    onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                    className="nav-profile-trigger flex items-center gap-2"
+                  >
+                    <UserCircle size={28} className="text-blue-600" />
+                    <span className="font-medium text-gray-700">{user.username}</span>
+                    <ChevronDown size={16} className={`text-gray-400 transition-transform ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {isUserDropdownOpen && (
+                    <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
+                      <Link to="/dashboard" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors" onClick={() => setIsUserDropdownOpen(false)}>
+                        <LayoutDashboard size={18} /> Dashboard
+                      </Link>
+                      <Link to="/profile" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors" onClick={() => setIsUserDropdownOpen(false)}>
+                        <UserCircle size={18} /> Profile
+                      </Link>
+                      <div className="h-px bg-gray-100 my-1"></div>
+                      <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 transition-colors">
+                        <LogOut size={18} /> Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </div>
+
+          {/* Mobile Backdrop for Dropdown */}
+          {isUserDropdownOpen && (
+            <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setIsUserDropdownOpen(false)}></div>
+          )}
 
           {/* Mobile Menu Toggle */}
           <button className="mobile-menu-toggle" onClick={toggleMenu} aria-label="Toggle Menu">
