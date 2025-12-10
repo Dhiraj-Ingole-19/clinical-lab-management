@@ -34,7 +34,29 @@
   color: var(--color-primary);
 }
 
-/* User Desktop Menu */
+/* =========================================
+   DESKTOP MENU STYLES (Fixed)
+   ========================================= */
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  /* Nice spacing between links and profile */
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--color-text);
+  font-weight: 500;
+  transition: color 0.2s;
+  font-size: 0.95rem;
+}
+
+.nav-link:hover {
+  color: var(--color-primary);
+}
+
+/* User Desktop Menu (Legacy/Specific) */
 .navbar-user-menu {
   display: flex;
   align-items: center;
