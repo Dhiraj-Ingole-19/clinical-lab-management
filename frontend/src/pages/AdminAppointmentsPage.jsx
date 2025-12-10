@@ -11,7 +11,7 @@ const AdminAppointmentsPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('ALL');
 
-    // 1. Fetch Appointments using useQuery (PRESERVED)
+    // 1. Fetch Appointments using useQuery
     const {
         data: appointments = [],
         isLoading,
@@ -24,7 +24,7 @@ const AdminAppointmentsPage = () => {
         }
     });
 
-    // 2. Update Status using useMutation (PRESERVED)
+    // 2. Update Status using useMutation
     const updateStatusMutation = useMutation({
         mutationFn: async ({ id, status, reportUrl }) => {
             return await labApi.updateAppointmentStatus(id, status, reportUrl);
@@ -39,11 +39,7 @@ const AdminAppointmentsPage = () => {
     });
 
     const handleStatusUpdate = (id, status) => {
-        // If status is passed (from my hardcoded card), use it. 
-        // Or if generic update, we could prompt. 
-        // For now, adhering to the signature used in AppointmentCard: onUpdateStatus(id, 'COMPLETED')
         if (!status) return;
-
         if (!window.confirm(`Are you sure you want to mark this as ${status}?`)) return;
         updateStatusMutation.mutate({ id, status, reportUrl: null });
     };
@@ -53,10 +49,10 @@ const AdminAppointmentsPage = () => {
         .filter(apt => {
             const matchesSearch = (apt.patientName && apt.patientName.toLowerCase().includes(searchTerm.toLowerCase())) ||
                 (apt.id.toString().includes(searchTerm));
-            const matchesStatus = statusFilter === 'ALL' || apt.status === statusFilter; // StickyHeader passes 'ALL' or specific status
+            const matchesStatus = statusFilter === 'ALL' || apt.status === statusFilter;
             return matchesSearch && matchesStatus;
         })
-        .sort((a, b) => new Date(b.appointmentTime) - new Date(a.appointmentTime)); // Newest first
+        .sort((a, b) => new Date(a.appointmentTime) - new Date(b.appointmentTime)); // Ascending (Oldest first)
 
     if (isError) return (
         <div className="flex flex-col items-center justify-center h-screen text-red-500 bg-gray-50">
@@ -67,17 +63,22 @@ const AdminAppointmentsPage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 pb-32">
-            {/* 1. Header (Slim) */}
-            <StickyHeader onSearch={setSearchTerm} onFilterChange={setStatusFilter} />
+            {/* MASTER STICKY CONTAINER (Title + Search) */}
+            {/* Sits right below the Global Navbar (64px) */}
+            <div className="sticky top-[64px] z-30 bg-white border-b border-gray-200 shadow-sm">
 
-            {/* 2. Content Grid */}
-            <div className="p-4 max-w-7xl mx-auto">
-                {/* Page Title - Now below the Sticky Header */}
-                <div className="mb-5 mt-2 px-1">
-                    <h2 className="text-xl font-bold text-gray-900">All Appointments</h2>
-                    <p className="text-gray-500 text-xs mt-0.5">Manage patient requests</p>
+                {/* 1. Fixed Heading */}
+                <div className="px-4 py-3 bg-white border-b border-gray-100">
+                    <h2 className="text-2xl font-bold text-slate-900 tracking-tight font-display">All Appointments</h2>
+                    <p className="text-slate-500 text-sm mt-0.5">Manage all patient bookings</p>
                 </div>
 
+                {/* 2. Fixed Search Bar (Imported Component) */}
+                <StickyHeader onSearch={setSearchTerm} onFilterChange={setStatusFilter} />
+            </div>
+
+            {/* 3. Scrollable Content Stream */}
+            <div className="p-4 max-w-7xl mx-auto">
                 {isLoading ? (
                     <div className="text-center py-10 text-gray-500">Loading appointments...</div>
                 ) : (
@@ -100,7 +101,7 @@ const AdminAppointmentsPage = () => {
                 )}
             </div>
 
-            {/* 3. Bottom Nav */}
+            {/* Bottom Nav */}
             <MobileNavbar />
         </div>
     );
