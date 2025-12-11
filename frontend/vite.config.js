@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
+// Trigger Vercel Build (Hotfix for Desktop Modal revert)
 export default defineConfig({
   base: '/',
   plugins: [
