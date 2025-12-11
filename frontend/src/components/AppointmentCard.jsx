@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, MapPin, Phone, ChevronDown, ChevronUp, FileText, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 
-const AppointmentCard = ({ appointment, onUpdateStatus }) => {
+const AppointmentCard = ({ appointment, onClick, onUpdateStatus }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     // --- 🔧 Data Mapping Logic (Backend Entity -> Frontend Display) ---
@@ -51,6 +51,21 @@ const AppointmentCard = ({ appointment, onUpdateStatus }) => {
     const isHome = appointment.isHomeVisit
         || (appointment.collectionAddress && appointment.collectionAddress.length > 5);
 
+    // --- 🖱️ Interaction Handler (Hybrid UX) ---
+    const handleCardClick = (e) => {
+        // Prevent trigger if clicking buttons/links
+        if (e.target.closest('button') || e.target.closest('a')) return;
+
+        const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+        if (isDesktop) {
+            // Desktop: Open Modal
+            onClick(appointment);
+        } else {
+            // Mobile: Toggle Accordion
+            setIsExpanded(!isExpanded);
+        }
+    };
+
     // --- 🎨 UI Styles ---
     const getStatusClasses = (status) => {
         switch (status?.toLowerCase()) {
@@ -64,7 +79,7 @@ const AppointmentCard = ({ appointment, onUpdateStatus }) => {
 
     return (
         <div className={`bg-white rounded-xl shadow-sm border border-slate-200 border-l-[6px] mb-4 transition-all ${styles.container}`}>
-            <div className="p-4 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+            <div className="p-4 cursor-pointer" onClick={handleCardClick}>
                 <div className="flex justify-between items-start mb-3">
                     <div>
                         <div className="flex items-center gap-2">
