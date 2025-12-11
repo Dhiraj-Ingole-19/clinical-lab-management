@@ -72,7 +72,7 @@ const AppointmentCard = ({ appointment, onClick, onUpdateStatus }) => {
             case 'cancelled': return { container: 'border-red-500', badge: 'bg-red-50 text-red-600', icon: <XCircle size={14} /> };
             case 'completed': return { container: 'border-green-500', badge: 'bg-green-50 text-green-600', icon: <CheckCircle size={14} /> };
             case 'confirmed': return { container: 'border-blue-500', badge: 'bg-blue-50 text-blue-600', icon: <CheckCircle size={14} /> };
-            default: return { container: 'border-yellow-400', badge: 'bg-yellow-50 text-yellow-700', icon: <AlertCircle size={14} /> };
+            default: return { container: 'border-slate-400', badge: 'bg-slate-100 text-slate-600', icon: <Clock size={14} /> };
         }
     };
     const styles = getStatusClasses(appointment.status);

@@ -53,7 +53,11 @@ const AdminAppointmentsPage = () => {
             const matchesStatus = statusFilter === 'ALL' || apt.status === statusFilter;
             return matchesSearch && matchesStatus;
         })
-        .sort((a, b) => new Date(a.appointmentTime) - new Date(b.appointmentTime)); // Ascending (Oldest first)
+        .sort((a, b) => {
+            const dateA = a.appointmentTime ? new Date(a.appointmentTime) : new Date(0);
+            const dateB = b.appointmentTime ? new Date(b.appointmentTime) : new Date(0);
+            return dateA - dateB;
+        }); // Ascending (Oldest first)
 
     if (isError) return (
         <div className="flex flex-col items-center justify-center h-screen text-red-500 bg-gray-50">
