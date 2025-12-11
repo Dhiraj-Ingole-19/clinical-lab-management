@@ -3,12 +3,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { labApi } from '../services/api';
 import StickyHeader from '../components/StickyHeader';
 import AppointmentCard from '../components/AppointmentCard';
+import AppointmentDetailsModal from '../components/AppointmentDetailsModal';
 import './AdminDashboardPage.css';
 
 const AdminAppointmentsPage = () => {
     const queryClient = useQueryClient();
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('ALL');
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
 
     // 1. Fetch Appointments using useQuery
     const {
@@ -83,12 +85,13 @@ const AdminAppointmentsPage = () => {
                     <div className="text-center py-10 text-gray-500">Loading appointments...</div>
                 ) : (
                     /* Responsive Grid: 1 col mobile, 2 col tablet, 3 col desktop */
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-max">
                         {filteredAppointments.length > 0 ? (
                             filteredAppointments.map((appt) => (
                                 <AppointmentCard
                                     key={appt.id}
                                     appointment={appt}
+                                    onClick={setSelectedAppointment}
                                     onUpdateStatus={handleStatusUpdate}
                                 />
                             ))
@@ -100,6 +103,14 @@ const AdminAppointmentsPage = () => {
                     </div>
                 )}
             </div>
+
+            {/* 4. Details Modal */}
+            <AppointmentDetailsModal
+                isOpen={!!selectedAppointment}
+                appointment={selectedAppointment}
+                onClose={() => setSelectedAppointment(null)}
+                onUpdateStatus={handleStatusUpdate}
+            />
 
             {/* Bottom Nav provided by MainLayout */}
         </div>
