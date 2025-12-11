@@ -38,10 +38,10 @@ const AdminDashboardPage = () => {
     const todayCount = appointments.filter(a => a.appointmentTime && a.appointmentTime.startsWith(today)).length;
     const totalPatients = users.filter(u => u.roles && u.roles.some(r => r.name === 'ROLE_USER')).length;
 
-    // Recent 5 (Sorted by Date Descending)
-    const recentAppointments = [...appointments]
-        .sort((a, b) => new Date(b.appointmentTime) - new Date(a.appointmentTime))
-        .slice(0, 5);
+    // Today's Appointments (Filtered & Sorted Ascending)
+    const todaysAppointments = appointments
+        .filter(a => a.appointmentTime && a.appointmentTime.startsWith(today))
+        .sort((a, b) => new Date(a.appointmentTime) - new Date(b.appointmentTime));
 
     if (isLoading) return <div className="loading"><Loader2 className="animate-spin" /> Loading Admin Dashboard...</div>;
 
@@ -50,7 +50,7 @@ const AdminDashboardPage = () => {
             <header className="admin-header">
                 <div>
                     <h1>Admin Dashboard</h1>
-                    <p className="subtitle">Today's Overview</p>
+                    <p className="subtitle">Overview for {new Date().toLocaleDateString()}</p>
                 </div>
                 <div className="date-badge">
                     {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
@@ -84,12 +84,12 @@ const AdminDashboardPage = () => {
                 </div>
             </div>
 
-            {/* Recent Requests Section */}
+            {/* Today's Appointments Section */}
             <section className="recent-requests">
                 <div className="section-header">
-                    <h2>Recent Appointment Requests</h2>
+                    <h2>Today's Appointments</h2>
                     <Link to="/admin/appointments" className="view-all-btn">
-                        View All Appointments <ArrowRight size={16} />
+                        View All History <ArrowRight size={16} />
                     </Link>
                 </div>
 
@@ -98,28 +98,31 @@ const AdminDashboardPage = () => {
                         <thead>
                             <tr>
                                 <th>Patient Name</th>
-                                <th>Tests</th>
-                                <th>Requested Date</th>
-                                <th>Time</th>
+                                <th>Test(s)</th>
+                                <th>Scheduled Time</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {recentAppointments.length === 0 ? (
+                            {todaysAppointments.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5" className="empty-cell">No recent appointments found.</td>
+                                    <td colSpan="4" className="empty-cell">No appointments scheduled for today.</td>
                                 </tr>
                             ) : (
-                                recentAppointments.map(apt => (
+                                todaysAppointments.map(apt => (
                                     <tr key={apt.id}>
                                         <td>
                                             <div className="patient-info">
                                                 <span className="name">{apt.patientName || 'Self'}</span>
                                             </div>
                                         </td>
-                                        <td>{apt.tests.map(t => t.testName).join(', ')}</td>
-                                        <td>{new Date(apt.appointmentTime).toLocaleDateString()}</td>
-                                        <td>{new Date(apt.appointmentTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                                        <td>{Array.isArray(apt.tests) ? apt.tests.map(t => t.testName).join(', ') : (apt.testName || apt.testNames)}</td>
+                                        <td>
+                                            <div className="flex items-center gap-2 font-mono font-medium text-slate-600">
+                                                <Clock size={14} />
+                                                {new Date(apt.appointmentTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            </div>
+                                        </td>
                                         <td>
                                             <span className={`status-badge ${apt.status.toLowerCase()}`}>{apt.status}</span>
                                         </td>
