@@ -74,9 +74,9 @@ const AdminAppointmentsPage = () => {
             <div className="sticky top-0 z-30 bg-white border-b border-gray-200 shadow-sm">
 
                 {/* 1. Fixed Heading */}
-                <div className="px-4 py-3 bg-white border-b border-gray-100">
-                    <h2 className="text-2xl font-bold text-slate-900 tracking-tight font-display">All Appointments</h2>
-                    <p className="text-slate-500 text-sm mt-0.5">Manage all patient bookings</p>
+                <div className="px-4 py-6 md:px-8 md:py-8 bg-white border-b border-gray-100">
+                    <h2 className="text-2xl font-bold text-slate-900 tracking-tight">All Appointments</h2>
+                    <p className="text-slate-500 text-sm mt-1">Manage all patient bookings and history</p>
                 </div>
 
                 {/* 2. Fixed Search Bar (Imported Component) */}

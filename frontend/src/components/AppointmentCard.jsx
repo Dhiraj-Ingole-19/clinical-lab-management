@@ -67,101 +67,101 @@ const AppointmentCard = ({ appointment, onClick, onUpdateStatus }) => {
     };
 
     // --- 🎨 UI Styles ---
-    const getStatusClasses = (status) => {
+    // --- 🎨 UI Styles (Left Border + Badges) ---
+    const getStatusStyles = (status) => {
         switch (status?.toLowerCase()) {
-            case 'cancelled': return { container: 'border-red-500', badge: 'bg-red-50 text-red-600', icon: <XCircle size={14} /> };
-            case 'completed': return { container: 'border-green-500', badge: 'bg-green-50 text-green-600', icon: <CheckCircle size={14} /> };
-            case 'confirmed': return { container: 'border-blue-500', badge: 'bg-blue-50 text-blue-600', icon: <CheckCircle size={14} /> };
-            default: return { container: 'border-slate-400', badge: 'bg-slate-100 text-slate-600', icon: <Clock size={14} /> };
+            case 'completed': return {
+                borderClass: 'border-l-green-500',
+                badgeClass: 'bg-green-100 text-green-700',
+                icon: <CheckCircle size={14} className="stroke-[2.5px]" />,
+                text: 'Completed'
+            };
+            case 'cancelled': return {
+                borderClass: 'border-l-red-500',
+                badgeClass: 'bg-red-100 text-red-700',
+                icon: <XCircle size={14} className="stroke-[2.5px]" />,
+                text: 'Cancelled'
+            };
+            case 'confirmed': return {
+                borderClass: 'border-l-blue-500',
+                badgeClass: 'bg-blue-100 text-blue-700',
+                icon: <CheckCircle size={14} className="stroke-[2.5px]" />,
+                text: 'Confirmed'
+            };
+            default: return {
+                borderClass: 'border-l-indigo-500',
+                badgeClass: 'bg-indigo-50 text-indigo-700',
+                icon: <Clock size={14} className="stroke-[2.5px]" />,
+                text: 'Pending'
+            };
         }
     };
-    const styles = getStatusClasses(appointment.status);
+    const style = getStatusStyles(appointment.status);
 
     return (
-        <div className={`bg-white rounded-xl shadow-sm border border-slate-200 border-l-[6px] mb-4 transition-all ${styles.container}`}>
-            <div className="p-4 cursor-pointer" onClick={handleCardClick}>
-                <div className="flex justify-between items-start mb-3">
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-bold text-slate-800">{appointment.patientName}</h3>
-                            <span className="text-sm text-slate-400">#{appointment.id}</span>
-                        </div>
-                        <div className="flex items-start gap-2 mt-1">
-                            <FileText size={16} className="text-slate-400 mt-0.5 shrink-0" />
-                            <p className="text-sm text-slate-600 font-medium line-clamp-1">{displayTests}</p>
-                        </div>
-                    </div>
-                    {/* Status Badge */}
-                    <div className={`flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wide ${styles.badge}`}>
-                        {styles.icon}
-                        <span>{appointment.status}</span>
+        <div className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-slate-200 border-l-[6px] ${style.borderClass} flex flex-col h-full`}>
+            {/* Main Clickable Area */}
+            <div className="p-5 cursor-pointer flex-grow" onClick={handleCardClick}>
+
+                {/* Header Row: ID & Status */}
+                <div className="flex justify-between items-center mb-3">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">#{appointment.id}</span>
+                    <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide ${style.badgeClass}`}>
+                        {style.icon}
+                        <span>{style.text}</span>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between text-sm text-slate-500 font-medium">
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1.5"><Calendar size={16} /><span>{displayDate}</span></div>
-                        <div className="flex items-center gap-1.5"><Clock size={16} /><span>{displayTime}</span></div>
+                {/* Patient Name */}
+                <h3 className="text-lg font-bold text-slate-900 mb-1 leading-tight">{appointment.patientName || 'Unknown Patient'}</h3>
+
+                {/* Test Name */}
+                <div className="flex items-start gap-2 mb-4">
+                    <FileText size={16} className="text-slate-400 mt-0.5 shrink-0" />
+                    <p className="text-sm text-slate-600 font-medium line-clamp-2">{displayTests}</p>
+                </div>
+
+                {/* Date & Time Pills */}
+                <div className="flex items-center gap-2 mt-auto">
+                    <div className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100 text-xs font-semibold text-slate-600">
+                        <Calendar size={14} className="text-slate-400" />
+                        <span>{displayDate}</span>
                     </div>
-                    <div className="text-slate-400 transform transition-transform duration-300">
-                        {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    <div className="flex items-center gap-1.5 bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-100 text-xs font-semibold text-slate-600">
+                        <Clock size={14} className="text-slate-400" />
+                        <span>{displayTime}</span>
                     </div>
                 </div>
             </div>
 
+            {/* Expanded Content (Mobile Accordion / Desktop Modal Logic remains) */}
             {isExpanded && (
-                <div className="px-4 pb-5 pt-2 border-t border-slate-100 mt-1 space-y-4">
-                    {/* Age & Sex Boxes */}
-                    <div className="flex justify-between items-center text-sm gap-3 mt-3">
-                        <div className="bg-blue-50 px-4 py-2.5 rounded-lg flex-1 border border-blue-100">
-                            <span className="text-xs text-blue-500 font-bold uppercase block mb-0.5">Age</span>
-                            <p className="font-semibold text-slate-800 text-base">{displayAge} <span className="text-slate-500 font-normal text-sm">Years Old</span></p>
+                <div className="px-5 pb-5 pt-0 border-t border-slate-50 mt-2 bg-gray-50/30">
+                    {/* ... Existing Action Buttons & Details Logic ... */}
+                    <div className="pt-4 space-y-4">
+                        <div className="flex items-start gap-3">
+                            <MapPin size={18} className={`mt-0.5 ${isHome ? 'text-blue-500' : 'text-slate-400'}`} />
+                            <div>
+                                <span className="text-xs text-slate-400 font-bold uppercase block">Location</span>
+                                <p className={`text-sm font-medium ${isHome ? 'text-slate-800' : 'text-slate-600'}`}>
+                                    {isHome ? (appointment.collectionAddress || 'Home Visit') : 'Lab Visit (Walk-in)'}
+                                </p>
+                            </div>
                         </div>
-                        <div className="bg-pink-50 px-4 py-2.5 rounded-lg flex-1 border border-pink-100">
-                            <span className="text-xs text-pink-500 font-bold uppercase block mb-0.5">Sex</span>
-                            <p className="font-semibold text-slate-800 text-base">{displayGender}</p>
-                        </div>
-                    </div>
 
-                    {/* Location */}
-                    <div className="flex items-start gap-3 px-1">
-                        <MapPin size={20} className={`mt-0.5 ${isHome ? 'text-blue-500' : 'text-slate-400'}`} />
-                        <div>
-                            <span className="text-xs text-slate-400 font-bold uppercase block">Location</span>
-                            <p className={`text-base font-medium ${isHome ? 'text-slate-800' : 'text-slate-600'}`}>
-                                {isHome ? (appointment.collectionAddress || 'Home Visit (Address Pending)') : 'Lab Visit (Walk-in)'}
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center justify-between gap-3 pt-3 border-t border-slate-100">
-                        {displayPhone ? (
-                            <a
-                                href={`tel:${displayPhone}`}
-                                onClick={(e) => e.stopPropagation()}
-                                className="flex items-center gap-2 text-blue-600 font-semibold px-2 py-2 rounded-lg hover:bg-blue-50 transition-colors"
-                            >
-                                <Phone size={18} /> Call
-                            </a>
-                        ) : (
-                            <span className="text-slate-400 text-sm px-2">No Phone</span>
-                        )}
-
-
-                        {appointment.status !== 'COMPLETED' && appointment.status !== 'CANCELLED' ? (
+                        <div className="flex items-center justify-between gap-3 pt-2">
+                            {displayPhone ? (
+                                <a href={`tel:${displayPhone}`} className="flex-1 flex items-center justify-center gap-2 text-blue-600 text-sm font-bold bg-blue-50 py-2.5 rounded-lg hover:bg-blue-100 transition-colors">
+                                    <Phone size={16} /> Call
+                                </a>
+                            ) : null}
                             <button
                                 onClick={(e) => { e.stopPropagation(); onUpdateStatus(appointment.id, 'COMPLETED'); }}
-                                className="flex items-center gap-2 bg-blue-600 text-white font-medium px-6 py-2.5 rounded-lg hover:bg-blue-700 shadow-sm shadow-blue-200 transition-all active:scale-95"
+                                className="flex-1 flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 text-sm font-bold py-2.5 rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
                             >
-                                <CheckCircle size={18} /> Complete
+                                Details <ChevronDown size={16} />
                             </button>
-                        ) : (
-                            <div className="flex items-center gap-2 text-slate-400 font-medium px-4 py-2">
-                                {appointment.status === 'CANCELLED' ? <XCircle size={18} /> : <CheckCircle size={18} />}
-                                <span className="uppercase">{appointment.status}</span>
-                            </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             )}
