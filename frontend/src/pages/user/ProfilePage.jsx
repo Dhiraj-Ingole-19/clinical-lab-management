@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { authApi } from '../../services/api';
-import { User, MapPin, Phone, Calendar, Camera, Edit2, Save, X } from 'lucide-react';
+import { User, MapPin, Phone, Calendar, Camera, Edit2, Save, X, LogOut } from 'lucide-react';
 import './ProfilePage.css';
 
+import { useNavigate } from 'react-router-dom';
+
 const ProfilePage = () => {
-    const { user, login } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         fullName: '',
         age: '',
@@ -254,6 +257,22 @@ const ProfilePage = () => {
                             </div>
                         )}
                     </form>
+
+                    {/* Logout Section */}
+                    {!isEditing && (
+                        <div className="mt-8 pt-6 border-t border-gray-100">
+                            <button
+                                onClick={() => {
+                                    logout();
+                                    navigate('/');
+                                }}
+                                className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-red-50 text-red-600 font-bold hover:bg-red-50 hover:border-red-100 transition-all group"
+                            >
+                                <LogOut size={20} className="group-hover:scale-110 transition-transform" />
+                                Sign Out
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

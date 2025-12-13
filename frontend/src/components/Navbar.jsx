@@ -64,32 +64,11 @@ const Navbar = () => {
                   </Link>
                 ))}
 
-                {/* User Dropdown */}
-                <div className="relative user-dropdown-container">
-                  <button
-                    onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                    className="nav-profile-trigger flex items-center gap-2"
-                  >
-                    <UserCircle size={28} className="text-blue-600" />
-                    <span className="font-medium text-gray-700">{user.username}</span>
-                    <ChevronDown size={16} className={`text-gray-400 transition-transform ${isUserDropdownOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {isUserDropdownOpen && (
-                    <div className="absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
-                      <Link to="/dashboard" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors" onClick={() => setIsUserDropdownOpen(false)}>
-                        <LayoutDashboard size={18} /> Dashboard
-                      </Link>
-                      <Link to="/profile" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-colors" onClick={() => setIsUserDropdownOpen(false)}>
-                        <UserCircle size={18} /> Profile
-                      </Link>
-                      <div className="h-px bg-gray-100 my-1"></div>
-                      <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2.5 text-left text-sm text-red-600 hover:bg-red-50 transition-colors">
-                        <LogOut size={18} /> Logout
-                      </button>
-                    </div>
-                  )}
-                </div>
+                {/* User Profile Link (Direct) */}
+                <Link to="/profile" className="nav-profile-trigger flex items-center gap-2">
+                  <UserCircle size={28} className="text-blue-600" />
+                  <span className="font-medium text-gray-700">{user.username}</span>
+                </Link>
               </>
             )}
           </div>
