@@ -84,7 +84,7 @@ const AdminAppointmentsPage = () => {
             </div>
 
             {/* 3. Scrollable Content Stream */}
-            <div className="p-6 md:p-8 pt-8 md:pt-10 max-w-7xl mx-auto space-y-6">
+            <div className="p-6 md:p-8 mt-6 md:mt-8 max-w-7xl mx-auto space-y-6">
                 {isLoading ? (
                     <div className="text-center py-10 text-gray-500">Loading appointments...</div>
                 ) : (
